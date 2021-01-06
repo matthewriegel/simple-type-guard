@@ -1,0 +1,13 @@
+{
+  "editor.tabSize": 2, // Match Prettier settings
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.insertFinalNewline": true,
+  "window.title": "${activeEditorMedium}${separator}${rootName}",
+  "explorer.sortOrder": "filesFirst",
+  "liveshare.allowGuestDebugControl": true,
+  "terminal.integrated.scrollback": 25000,
+  "task.quickOpen.history": 3,
+  "typescript.tsdk": "./tools/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
