@@ -5,4 +5,9 @@ describe('simple temporary test', () => {
     const result = unknownMatchesTemplate('hello', 'string');
     expect(result).toBe(true);
   });
+
+  test('temp', () => {
+    const result = unknownMatchesTemplate('hello', 'sring');
+    expect(result).toBe(false);
+  });
 });
