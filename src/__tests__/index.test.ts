@@ -1,8 +1,8 @@
-import simpleTypeGuard from '../';
+import unknownMatchesTemplate from '../';
 
 describe('simple temporary test', () => {
   test('temp', () => {
-    const result = simpleTypeGuard('hello', 'string');
+    const result = unknownMatchesTemplate('hello', 'string');
     expect(result).toBe(true);
   });
 });
