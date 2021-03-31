@@ -8,7 +8,7 @@ export type TypeofToType<T> = T extends 'number'
   ? undefined
   : never;
 
-type TypeToTypeof<T> = T extends number
+type TypeToTypeof<T, Continued> = T extends number
   ? 'number'
   : T extends string
   ? 'string'
@@ -16,10 +16,13 @@ type TypeToTypeof<T> = T extends number
   ? 'boolean'
   : T extends undefined
   ? 'undefined'
-  : TemplateMap<T>;
+  : Continued;
 
 export type TypeofValue = 'string' | 'number' | 'boolean' | 'undefined';
 
-export type TemplateMap<ReturnType> = {
-  [Property in keyof ReturnType]: TypeToTypeof<ReturnType[Property]>;
-};
+export type TemplateMap<ReturnType> = TypeToTypeof<
+  ReturnType,
+  {
+    [Property in keyof ReturnType]: TemplateMap<ReturnType[Property]>;
+  }
+>;

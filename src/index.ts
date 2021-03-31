@@ -39,7 +39,7 @@ const unknownMatchesTemplate = <ReturnType>(
       // If the template value is an object, recursively check object's value
       propertyMatches = unknownMatchesTemplate(
         unknownObjectValue,
-        templateValue as Exclude<typeof templateValue, TypeofValue>
+        templateValue as any
       );
     }
     if (!propertyMatches) {
