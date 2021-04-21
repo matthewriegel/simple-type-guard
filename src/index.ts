@@ -2,7 +2,7 @@ import { isObject } from './object';
 import { isBasicPrimitiveTypeof } from './primitive';
 import { TemplateMap, TypeofToType, TypeofValue } from './types';
 
-export const typeofUnknownValueMatchesTypeofValue = <Type extends TypeofValue>(
+const typeofUnknownValueMatchesTypeofValue = <Type extends TypeofValue>(
   unknownObjectValue: unknown,
   typeofValue: Type
 ): unknownObjectValue is TypeofToType<Type> =>
