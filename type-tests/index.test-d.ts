@@ -1,5 +1,5 @@
 import { expectError, expectType } from 'tsd';
-import unknownMatchesTemplate from '.';
+import unknownMatchesTemplate from '../src';
 
 const variable: unknown = '';
 
@@ -33,4 +33,36 @@ expectType<number | null>(
 expectType<undefined | null>(
   unknownMatchesTemplate<undefined>(variable, 'undefined') ? variable : null
 );
-/** */
+
+/**
+ * Shallow Objects
+ */
+// Error
+expectError(
+  unknownMatchesTemplate<{ hello: string }>(variable, { hello: 'number' })
+    ? variable
+    : null
+);
+expectError(
+  unknownMatchesTemplate<{ hello: string }>(variable, 'string')
+    ? variable
+    : null
+);
+expectError(
+  unknownMatchesTemplate<{ hello: string }>(variable, {}) ? variable : null
+);
+expectError(
+  unknownMatchesTemplate<{ hello: string }>(variable, {
+    hello: 'string',
+    error: 'undefined',
+  })
+    ? variable
+    : null
+);
+
+// Success
+expectType<{ hello: string } | null>(
+  unknownMatchesTemplate<{ hello: string }>(variable, { hello: 'string' })
+    ? variable
+    : null
+);

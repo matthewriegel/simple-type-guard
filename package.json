@@ -10,7 +10,7 @@
   "scripts": {
     "test": "npm run test:types && npm run test:unit",
     "test:unit": "jest --config jest.config.js",
-    "test:types": "tsd",
+    "test:types": "npm run build && tsd",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
@@ -44,6 +44,6 @@
   },
   "dependencies": {},
   "tsd": {
-    "directory": "src"
+    "directory": "type-tests"
   }
 }
