@@ -66,3 +66,76 @@ expectType<{ hello: string } | null>(
     ? variable
     : null
 );
+
+/**
+ * Deep Objects
+ */
+// Error
+expectError(
+  unknownMatchesTemplate<{
+    hello: {
+      world: number;
+    };
+  }>(variable, {
+    hello: {
+      world: 'string',
+    },
+  })
+    ? variable
+    : null
+);
+expectError(
+  unknownMatchesTemplate<{
+    hello: {
+      world: number;
+    };
+  }>(variable, {
+    hello: {
+      world: 'number',
+      fail: 'string',
+    },
+  })
+    ? variable
+    : null
+);
+expectError(
+  unknownMatchesTemplate<{
+    hello: {
+      world: number;
+    };
+  }>(variable, {
+    hello: {},
+  })
+    ? variable
+    : null
+);
+expectError(
+  unknownMatchesTemplate<{
+    hello: {
+      world: number;
+    };
+  }>(variable, {
+    hello: 'string',
+  })
+    ? variable
+    : null
+);
+
+// Success
+expectType<{
+  hello: {
+    world: number;
+  };
+} | null>(
+  unknownMatchesTemplate<{
+    hello: {
+      world: number;
+    };
+  }>(variable, {
+    hello: {
+      world: 'number',
+    },
+  })
+    ? variable
+    : null
+);
