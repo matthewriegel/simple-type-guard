@@ -12,6 +12,10 @@ const unknownMatchesTemplate = <ReturnType>(
   unknownVariable: unknown,
   template: TemplateMap<ReturnType>
 ): unknownVariable is ReturnType => {
+  if (typeof template === 'function') {
+    return template(unknownVariable);
+  }
+
   // Unknown object must be of an object type to match the template
   if (!isObject(unknownVariable) && !isObject(template)) {
     return typeof unknownVariable === template;

@@ -4,7 +4,7 @@ interface ObjectType<T> {
   test: T;
 }
 
-describe('simple temporary test', () => {
+describe('primitive type tests', () => {
   test('type guard recognizes object with string key/value - truthy', () => {
     const result = unknownMatchesTemplate<ObjectType<string>>(
       { test: 'hello' },

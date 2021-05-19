@@ -8,6 +8,8 @@ export type TypeofToType<T> = T extends 'number'
   ? undefined
   : never;
 
+type FunctionalComparison = (item: unknown) => boolean;
+
 type TypeToTypeof<T, Continued> = T extends number
   ? 'number'
   : T extends string
@@ -20,9 +22,11 @@ type TypeToTypeof<T, Continued> = T extends number
 
 export type TypeofValue = 'string' | 'number' | 'boolean' | 'undefined';
 
-export type TemplateMap<ReturnType> = TypeToTypeof<
-  ReturnType,
-  {
-    [Property in keyof ReturnType]: TemplateMap<ReturnType[Property]>;
-  }
->;
+export type TemplateMap<ReturnType> =
+  | TypeToTypeof<
+      ReturnType,
+      {
+        [Property in keyof ReturnType]: TemplateMap<ReturnType[Property]>;
+      }
+    >
+  | FunctionalComparison;
