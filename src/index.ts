@@ -28,8 +28,11 @@ const unknownMatchesTemplate = <ReturnType>(
     if (!template.hasOwnProperty(templateKey)) {
       continue;
     }
-    // value is either 'string', 'number', 'boolean', 'undefined', or an object.
-    const templateValue = template[templateKey];
+
+    type PropertyType = Extract<ReturnType, keyof TemplateMap<ReturnType>>;
+
+    // `templateValue` is either 'string', 'number', 'boolean', 'undefined', 'function' or an object.
+    const templateValue = template[templateKey] as PropertyType;
     const unknownObjectValue = unknownVariable[templateKey];
 
     let propertyMatches: boolean = false;
@@ -40,10 +43,10 @@ const unknownMatchesTemplate = <ReturnType>(
         templateValue
       );
     } else {
-      // If the template value is an object, recursively check object's value
-      propertyMatches = unknownMatchesTemplate(
+      // If the template value is an object or function, recursively check object's value
+      propertyMatches = unknownMatchesTemplate<PropertyType>(
         unknownObjectValue,
-        templateValue as any
+        templateValue
       );
     }
     if (!propertyMatches) {
