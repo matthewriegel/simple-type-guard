@@ -1,6 +1,6 @@
 import unknownMatchesTemplate from '..';
 
-describe('simple temporary test', () => {
+describe('object type tests', () => {
   test('type guard recognizes string - truthy', () => {
     const result = unknownMatchesTemplate<string>('hello', 'string');
     expect(result).toBe(true);
