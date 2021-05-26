@@ -139,3 +139,27 @@ expectType<{
     ? variable
     : null
 );
+
+/**
+ * Arrays
+ */
+// Error
+expectError(unknownMatchesTemplate<string[]>(variable, []) ? variable : null);
+expectError(
+  unknownMatchesTemplate<string[]>(variable, ['number']) ? variable : null
+);
+expectError(
+  unknownMatchesTemplate<[string[]]>(variable, ['string']) ? variable : null
+);
+expectError(
+  unknownMatchesTemplate<Array<{ key: string }>>(variable, [{ key: 'number' }])
+    ? variable
+    : null
+);
+
+// Success
+expectType<[[{ key: string }]] | null>(
+  unknownMatchesTemplate<[[{ key: string }]]>(variable, [[{ key: 'string' }]])
+    ? variable
+    : null
+);
