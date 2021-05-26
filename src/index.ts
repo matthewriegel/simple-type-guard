@@ -8,12 +8,39 @@ const typeofUnknownValueMatchesTypeofValue = <Type extends TypeofValue>(
 ): unknownObjectValue is TypeofToType<Type> =>
   typeof unknownObjectValue === typeofValue;
 
+const typeofArrayItemsMatcheType = <
+  ReturnType,
+  Type extends TemplateMap<ReturnType>
+>(
+  unknownObjectValue: unknown,
+  type: Type
+): unknownObjectValue is TypeofToType<ReturnType>[] => {
+  if (!Array.isArray(unknownObjectValue)) {
+    return false;
+  }
+
+  return unknownObjectValue.every(unknownArrayIndex =>
+    unknownMatchesTemplate(unknownArrayIndex, type)
+  );
+};
+
+// TODO: find more elegant way of doing this
+const isArray = (unknownTemplate: unknown): unknownTemplate is [any] =>
+  Array.isArray(unknownTemplate);
+
 const unknownMatchesTemplate = <ReturnType>(
   unknownVariable: unknown,
   template: TemplateMap<ReturnType>
 ): unknownVariable is ReturnType => {
+  type PropertyType = Extract<ReturnType, keyof TemplateMap<ReturnType>>;
+
   if (typeof template === 'function') {
     return template(unknownVariable);
+  }
+
+  if (isArray(template)) {
+    const value = template[0];
+    return typeofArrayItemsMatcheType(unknownVariable, value);
   }
 
   // Unknown object must be of an object type to match the template
@@ -28,8 +55,6 @@ const unknownMatchesTemplate = <ReturnType>(
     if (!template.hasOwnProperty(templateKey)) {
       continue;
     }
-
-    type PropertyType = Extract<ReturnType, keyof TemplateMap<ReturnType>>;
 
     // `templateValue` is either 'string', 'number', 'boolean', 'undefined', 'function' or an object.
     const templateValue = template[templateKey] as PropertyType;
