@@ -23,7 +23,7 @@ export type TypeToTypeof<T, Continued> = T extends number
   ? 'boolean'
   : T extends undefined
   ? 'undefined'
-  : T extends []
+  : T extends [UnpackArray<T>]
   ? [UnpackArray<T>]
   : Continued;
 

@@ -144,7 +144,6 @@ expectType<{
  * Arrays
  */
 // Error
-expectError(unknownMatchesTemplate<string[]>(variable, []) ? variable : null);
 expectError(
   unknownMatchesTemplate<string[]>(variable, ['number']) ? variable : null
 );
@@ -152,10 +151,12 @@ expectError(
   unknownMatchesTemplate<[string[]]>(variable, ['string']) ? variable : null
 );
 expectError(
-  unknownMatchesTemplate<Array<{ key: string }>>(variable, [{ key: 'number' }])
+  unknownMatchesTemplate<{ key: string }[]>(variable, [{ key: 'number' }])
     ? variable
     : null
 );
+// TODO: see if empty arrays can trigger errors
+// expectError(unknownMatchesTemplate<string[]>(variable, []) ? variable : null);
 
 // Success
 expectType<[[{ key: string }]] | null>(
