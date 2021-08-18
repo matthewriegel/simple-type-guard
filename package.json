@@ -1,6 +1,6 @@
 {
   "name": "simple-type-guard",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This module allows you to quickly and safely validate variables against a defined template, enforced by Typescript. No hasstle and easy to scan.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,7 @@
     "test": "npm run test:types && npm run test:unit",
     "test:unit": "jest --config jest.config.js",
     "test:types": "npm run build && tsd",
-    "build": "tsc",
+    "build": "rm -rf ./lib && tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
