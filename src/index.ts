@@ -1,6 +1,6 @@
 import { isObject } from './object';
 import { isBasicPrimitiveTypeof } from './primitive';
-import { TemplateMap, TypeofToType, TypeofValue } from './types';
+import { TemplateMap, TypeofToType, TypeofValue, UnpackArray } from './types';
 
 const typeofUnknownValueMatchesTypeofValue = <Type extends TypeofValue>(
   unknownObjectValue: unknown,
@@ -40,7 +40,10 @@ const unknownMatchesTemplate = <ReturnType>(
 
   if (isArray(template)) {
     const value = template[0];
-    return typeofArrayItemsMatcheType(unknownVariable, value);
+    return typeofArrayItemsMatcheType(
+      unknownVariable,
+      value as TemplateMap<ReturnType>
+    );
   }
 
   // Unknown object must be of an object type to match the template
