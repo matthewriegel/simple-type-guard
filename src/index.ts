@@ -39,7 +39,7 @@ const handleResult = (
   options: Options,
   currentPath: string
 ): boolean => {
-  if (!options.throwErrorOnFailure) {
+  if (result || !options.throwErrorOnFailure) {
     return result;
   }
 
