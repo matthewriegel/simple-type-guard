@@ -119,25 +119,14 @@ const unknownMatchesTemplate = <ReturnType>(
     const templateValue = template[templateKey] as PropertyType;
     const unknownObjectValue = unknownVariable[templateKey];
 
-    let propertyMatches: boolean = false;
-    if (isBasicPrimitiveTypeof(templateValue)) {
-      // If the template value is of primitive typeof, check that it matches
-      propertyMatches = handleResult(
-        typeofUnknownValueMatchesTypeofValue(unknownObjectValue, templateValue),
-        unknownObjectValue,
-        templateValue,
-        options,
-        `${currentPath}.${templateKey}`
-      );
-    } else {
-      // If the template value is an object or function, recursively check object's value
-      propertyMatches = unknownMatchesTemplate<PropertyType>(
-        unknownObjectValue,
-        templateValue,
-        options,
-        `${currentPath}.${templateKey}`
-      );
-    }
+    // If the template value is an object or function, recursively check object's value
+    const propertyMatches = unknownMatchesTemplate<PropertyType>(
+      unknownObjectValue,
+      templateValue,
+      options,
+      `${currentPath}.${templateKey}`
+    );
+
     if (!propertyMatches) {
       return false;
     }
