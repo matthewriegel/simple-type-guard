@@ -1,6 +1,12 @@
 import { isObject } from './object';
 import { isBasicPrimitiveTypeof } from './primitive';
-import { TemplateMap, TypeofToType, TypeofValue, UnpackArray } from './types';
+import {
+  Options,
+  TemplateMap,
+  TypeofToType,
+  TypeofValue,
+  UnpackArray,
+} from './types';
 
 const typeofUnknownValueMatchesTypeofValue = <Type extends TypeofValue>(
   unknownObjectValue: unknown,
@@ -13,44 +19,94 @@ const typeofArrayItemsMatcheType = <
   Type extends TemplateMap<ReturnType>
 >(
   unknownObjectValue: unknown,
-  type: Type
+  type: Type,
+  options: Options,
+  currentPath: string
 ): unknownObjectValue is TypeofToType<ReturnType>[] => {
   if (!Array.isArray(unknownObjectValue)) {
     return false;
   }
 
   return unknownObjectValue.every(unknownArrayIndex =>
-    unknownMatchesTemplate(unknownArrayIndex, type)
+    unknownMatchesTemplate(unknownArrayIndex, type, options, `${currentPath}[]`)
   );
 };
 
-// TODO: find more elegant way of doing this
+const handleResult = (
+  result: boolean,
+  unknownVariable: unknown,
+  expectedType: unknown,
+  options: Options,
+  currentPath: string
+): boolean => {
+  if (!options.throwErrorOnFailure) {
+    return result;
+  }
+
+  let printedVariable: string;
+  try {
+    printedVariable = JSON.stringify(unknownVariable);
+  } catch (error) {
+    printedVariable = 'unknown';
+  }
+
+  throw new Error(
+    `Invalid type detected at "${currentPath}":
+Expected "${expectedType}"
+Found "${typeof unknownVariable}"
+
+Variable Output: ${printedVariable}`
+  );
+};
+
 const isArray = (unknownTemplate: unknown): unknownTemplate is [any] =>
   Array.isArray(unknownTemplate);
 
 const unknownMatchesTemplate = <ReturnType>(
   unknownVariable: unknown,
-  template: TemplateMap<ReturnType>
+  template: TemplateMap<ReturnType>,
+  options: Options,
+  currentPath: string
 ): unknownVariable is ReturnType => {
   type PropertyType = Extract<ReturnType, keyof TemplateMap<ReturnType>>;
 
   if (typeof template === 'function') {
-    return template(unknownVariable);
+    return handleResult(
+      template(unknownVariable),
+      unknownVariable,
+      'result-of-function',
+      options,
+      currentPath
+    );
   }
 
   if (isArray(template)) {
     const value = template[0];
-    return typeofArrayItemsMatcheType(
+    return handleResult(
+      typeofArrayItemsMatcheType(
+        unknownVariable,
+        value as TemplateMap<ReturnType>,
+        options,
+        currentPath
+      ),
       unknownVariable,
-      value as TemplateMap<ReturnType>
+      'array',
+      options,
+      currentPath
     );
   }
 
   // Unknown object must be of an object type to match the template
   if (!isObject(unknownVariable) && !isObject(template)) {
-    return typeof unknownVariable === template;
+    return handleResult(
+      typeof unknownVariable === template,
+      unknownVariable,
+      template,
+      options,
+      currentPath
+    );
   } else if (!isObject(unknownVariable)) {
-    return false;
+    return handleResult(false, unknownVariable, 'object', options, currentPath);
   }
 
   // iterate over every template key
@@ -66,15 +122,20 @@ const unknownMatchesTemplate = <ReturnType>(
     let propertyMatches: boolean = false;
     if (isBasicPrimitiveTypeof(templateValue)) {
       // If the template value is of primitive typeof, check that it matches
-      propertyMatches = typeofUnknownValueMatchesTypeofValue(
+      propertyMatches = handleResult(
+        typeofUnknownValueMatchesTypeofValue(unknownObjectValue, templateValue),
         unknownObjectValue,
-        templateValue
+        templateValue,
+        options,
+        `${currentPath}.${templateKey}`
       );
     } else {
       // If the template value is an object or function, recursively check object's value
       propertyMatches = unknownMatchesTemplate<PropertyType>(
         unknownObjectValue,
-        templateValue
+        templateValue,
+        options,
+        `${currentPath}.${templateKey}`
       );
     }
     if (!propertyMatches) {
@@ -86,4 +147,11 @@ const unknownMatchesTemplate = <ReturnType>(
   return true;
 };
 
-export default unknownMatchesTemplate;
+const simpleTypeGuard = <ReturnType>(
+  unknownVariable: unknown,
+  template: TemplateMap<ReturnType>,
+  options: Options = {}
+): unknownVariable is ReturnType =>
+  unknownMatchesTemplate(unknownVariable, template, options, '_root_');
+
+export default simpleTypeGuard;

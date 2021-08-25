@@ -48,3 +48,7 @@ export type TemplateMap<ReturnType> =
   | FunctionalComparison;
 
 export type TypeofValue = 'string' | 'number' | 'boolean' | 'undefined';
+
+export interface Options {
+  throwErrorOnFailure?: boolean;
+}

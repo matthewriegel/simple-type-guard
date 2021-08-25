@@ -1,33 +1,79 @@
 import unknownMatchesTemplate from '..';
 
-describe('object type tests', () => {
-  test('type guard recognizes string - truthy', () => {
-    const result = unknownMatchesTemplate<string>('hello', 'string');
+interface ObjectType<T> {
+  test: T;
+}
+
+describe('objects type tests', () => {
+  test('type guard recognizes object with string key/value - truthy', () => {
+    const result = unknownMatchesTemplate<ObjectType<string>>(
+      { test: 'hello' },
+      {
+        test: 'string',
+      }
+    );
     expect(result).toBe(true);
   });
 
-  test('type guard recognizes string - falsy', () => {
-    const result = unknownMatchesTemplate<string>(true, 'string');
+  test('type guard recognizes object with string key/value - falsy', () => {
+    const result = unknownMatchesTemplate<ObjectType<string>>(
+      { test: true },
+      {
+        test: 'string',
+      }
+    );
     expect(result).toBe(false);
   });
 
-  test('type guard recognizes boolean - truthy', () => {
-    const result = unknownMatchesTemplate<boolean>(true, 'boolean');
+  test('type guard recognizes object with number key/value - truthy', () => {
+    const result = unknownMatchesTemplate<ObjectType<number>>(
+      { test: 4 },
+      {
+        test: 'number',
+      }
+    );
     expect(result).toBe(true);
   });
 
-  test('type guard recognizes boolean - falsy', () => {
-    const result = unknownMatchesTemplate<boolean>('hello', 'boolean');
+  test('type guard recognizes object with string key/value - falsy', () => {
+    const result = unknownMatchesTemplate<ObjectType<number>>(
+      { test: true },
+      {
+        test: 'number',
+      }
+    );
     expect(result).toBe(false);
   });
 
-  test('type guard recognizes number - truthy', () => {
-    const result = unknownMatchesTemplate<number>(5, 'number');
+  test('type guard recognizes object with numbooleanber key/value - truthy', () => {
+    const result = unknownMatchesTemplate<ObjectType<boolean>>(
+      { test: true },
+      {
+        test: 'boolean',
+      }
+    );
     expect(result).toBe(true);
   });
 
-  test('type guard recognizes strings - falsy', () => {
-    const result = unknownMatchesTemplate<number>(true, 'number');
+  test('type guard recognizes object with boolean key/value - falsy', () => {
+    const result = unknownMatchesTemplate<ObjectType<boolean>>(
+      { test: 'true' },
+      {
+        test: 'boolean',
+      }
+    );
     expect(result).toBe(false);
+  });
+
+  test('type guard throws error on object with boolean key/value - falsy', () => {
+    expect(() =>
+      unknownMatchesTemplate<ObjectType<boolean>>(
+        { test: 'true' },
+        {
+          test: 'boolean',
+        },
+        { throwErrorOnFailure: true }
+      )
+    ).toThrow();
   });
 });
