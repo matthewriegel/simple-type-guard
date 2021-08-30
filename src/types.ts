@@ -39,11 +39,11 @@ export type UnpackArray<T> = T extends (infer U)[] ? U : T;
 export type TypeofMap<ReturnType> = TypeToTypeof<
   ReturnType,
   {
-    [Property in keyof ReturnType]: TemplateMap<ReturnType[Property]>;
+    [Property in keyof ReturnType]: TypeofToTemplate<ReturnType[Property]>;
   }
 >;
 
-export type TemplateMap<ReturnType> =
+export type TypeofToTemplate<ReturnType> =
   | TypeofMap<ReturnType>
   | FunctionalComparison;
 

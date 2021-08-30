@@ -1,22 +1,10 @@
 import { isObject } from './object';
-import { isBasicPrimitiveTypeof } from './primitive';
-import {
-  Options,
-  TemplateMap,
-  TypeofToType,
-  TypeofValue,
-  UnpackArray,
-} from './types';
-
-const typeofUnknownValueMatchesTypeofValue = <Type extends TypeofValue>(
-  unknownObjectValue: unknown,
-  typeofValue: Type
-): unknownObjectValue is TypeofToType<Type> =>
-  typeof unknownObjectValue === typeofValue;
+import { Options, TypeofToTemplate, TypeofToType } from './types';
+export type { TypeofToTemplate } from './types';
 
 const typeofArrayItemsMatcheType = <
   ReturnType,
-  Type extends TemplateMap<ReturnType>
+  Type extends TypeofToTemplate<ReturnType>
 >(
   unknownObjectValue: unknown,
   type: Type,
@@ -64,11 +52,11 @@ const isArray = (unknownTemplate: unknown): unknownTemplate is [any] =>
 
 const unknownMatchesTemplate = <ReturnType>(
   unknownVariable: unknown,
-  template: TemplateMap<ReturnType>,
+  template: TypeofToTemplate<ReturnType>,
   options: Options,
   currentPath: string
 ): unknownVariable is ReturnType => {
-  type PropertyType = Extract<ReturnType, keyof TemplateMap<ReturnType>>;
+  type PropertyType = Extract<ReturnType, keyof TypeofToTemplate<ReturnType>>;
 
   if (typeof template === 'function') {
     return handleResult(
@@ -85,7 +73,7 @@ const unknownMatchesTemplate = <ReturnType>(
     return handleResult(
       typeofArrayItemsMatcheType(
         unknownVariable,
-        value as TemplateMap<ReturnType>,
+        value as TypeofToTemplate<ReturnType>,
         options,
         currentPath
       ),
@@ -138,7 +126,7 @@ const unknownMatchesTemplate = <ReturnType>(
 
 const simpleTypeGuard = <ReturnType>(
   unknownVariable: unknown,
-  template: TemplateMap<ReturnType>,
+  template: TypeofToTemplate<ReturnType>,
   options: Options = {}
 ): unknownVariable is ReturnType =>
   unknownMatchesTemplate(unknownVariable, template, options, '_root_');
