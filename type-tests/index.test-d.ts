@@ -134,6 +134,20 @@ expectError(
     ? variable
     : null
 );
+expectError(
+  unknownMatchesTemplate<
+    | {
+        hello: {
+          world: number;
+        };
+      }
+    | undefined
+  >(variable, {
+    hello: 'string',
+  })
+    ? variable
+    : null
+);
 
 // Success
 expectType<{
@@ -146,6 +160,31 @@ expectType<{
       world: number;
     };
   }>(variable, {
+    hello: {
+      world: 'number',
+    },
+  })
+    ? variable
+    : null
+);
+expectType<
+  | {
+      hello: {
+        world: number;
+      };
+    }
+  | null
+  | undefined
+>(
+  unknownMatchesTemplate<
+    | {
+        hello: {
+          world: number;
+        };
+      }
+    | undefined
+  >(variable, {
+    $optional: true,
     hello: {
       world: 'number',
     },

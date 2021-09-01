@@ -76,4 +76,15 @@ describe('objects type tests', () => {
       )
     ).toThrow();
   });
+
+  test('type guard recognizes optional object - truthy', () => {
+    const result = unknownMatchesTemplate<ObjectType<boolean> | undefined>(
+      undefined,
+      {
+        $optional: true,
+        test: 'boolean',
+      }
+    );
+    expect(result).toBe(true);
+  });
 });

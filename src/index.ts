@@ -115,7 +115,13 @@ const unknownMatchesTemplate = <ReturnType>(
       currentPath
     );
   } else if (!isObject(unknownVariable)) {
-    return handleResult(false, unknownVariable, 'object', options, currentPath);
+    return handleResult(
+      (template as any).$optional,
+      unknownVariable,
+      'object',
+      options,
+      currentPath
+    );
   }
 
   // iterate over every template key

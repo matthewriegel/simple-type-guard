@@ -25,7 +25,7 @@ type OptionalPrimitiveCheck<
     : `${Typeof}?`
   : never;
 
-export type TypeToTypeof<VariableType, Continued> = [VariableType] extends [
+export type TypeToTypeof<VariableType> = [VariableType] extends [
   string | number | boolean | undefined
 ]
   ?
@@ -36,23 +36,49 @@ export type TypeToTypeof<VariableType, Continued> = [VariableType] extends [
       | OptionalPrimitiveCheck<VariableType, symbol, 'symbol'>
   : [[any]] extends [VariableType | undefined]
   ? Extract<VariableType, undefined> extends never
-    ? [TypeofMap<UnpackArray<VariableType>>] // no undefined
-    : [TypeofMap<UnpackArray<VariableType>>, 'optional'] // undefined and array
-  : Continued;
-
-// type TestType = string | undefined;
-
-// type A = Extract<TestType, undefined> extends never
-//   ? 'required' // no undefined
-//   : 'optional'; // undefined and array
-
-// type P = [[any]] extends [TestType | undefined]
-//   ? Extract<TestType, undefined> extends never
-//     ? 'required' // no undefined
-//     : 'optional' // undefined and array
-//   : 'no-match'; // not array or undefined
+    ? [TypeofToTemplate<Exclude<UnpackArray<VariableType>, undefined>>] // no undefined
+    : [
+        TypeofToTemplate<Exclude<UnpackArray<VariableType>, undefined>>,
+        'optional'
+      ] // undefined and array
+  : [Record<keyof VariableType, any>] extends [
+      Record<keyof VariableType, any> | undefined
+    ]
+  ? Extract<VariableType, undefined> extends never
+    ? {
+        [Property in keyof VariableType]: TypeofToTemplate<
+          VariableType[Property]
+        >;
+      }
+    : {
+        [Property in keyof VariableType]: TypeofToTemplate<
+          VariableType[Property]
+        >;
+      } & {
+        $optional: true;
+      }
+  : never;
 
 export type UnpackArray<T> = T extends (infer U)[] ? U : T;
+
+// type TEST_VARIABLE = [{ key: number }] | undefined;
+// type P = [Record<keyof TEST_VARIABLE, any>] extends [
+//   Record<keyof TEST_VARIABLE, any> | undefined
+// ]
+//   ? Extract<TEST_VARIABLE, undefined> extends never
+//     ? {
+//         [Property in keyof TEST_VARIABLE]: TypeofToTemplate<
+//           TEST_VARIABLE[Property]
+//         >;
+//       }
+//     : {
+//         [Property in keyof TEST_VARIABLE]: TypeofToTemplate<
+//           TEST_VARIABLE[Property]
+//         >;
+//       } & {
+//         $optional: true;
+//       }
+//   : never;
 
 /**
  * TypeofMap
@@ -61,12 +87,7 @@ export type UnpackArray<T> = T extends (infer U)[] ? U : T;
  * -      string     =>     'string'
  * - { key: string } => { key: 'string' }
  */
-export type TypeofMap<ReturnType> = TypeToTypeof<
-  ReturnType,
-  {
-    [Property in keyof ReturnType]: TypeofToTemplate<ReturnType[Property]>;
-  }
->;
+export type TypeofMap<ReturnType> = TypeToTypeof<ReturnType>;
 
 export type TypeofToTemplate<ReturnType> =
   | TypeofMap<ReturnType>
