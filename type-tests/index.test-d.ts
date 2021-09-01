@@ -169,12 +169,27 @@ expectError(
     ? variable
     : null
 );
+expectError(
+  unknownMatchesTemplate<[{ key: string }] | undefined>(variable, [
+    { key: 'string' },
+  ])
+    ? variable
+    : null
+);
 // TODO: see if empty arrays can trigger errors
 // expectError(unknownMatchesTemplate<string[]>(variable, []) ? variable : null);
 
 // Success
 expectType<[[{ key: string }]] | null>(
   unknownMatchesTemplate<[[{ key: string }]]>(variable, [[{ key: 'string' }]])
+    ? variable
+    : null
+);
+expectType<[{ key: string }] | null | undefined>(
+  unknownMatchesTemplate<[{ key: string }] | undefined>(variable, [
+    { key: 'string' },
+    'optional',
+  ])
     ? variable
     : null
 );

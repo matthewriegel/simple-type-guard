@@ -1,5 +1,5 @@
 import { isObject } from './object';
-import { Options, TypeofToTemplate, TypeofToType } from './types';
+import { Options, TypeofToTemplate, TypeofToType, UnpackArray } from './types';
 export type { TypeofToTemplate } from './types';
 
 const typeofArrayItemsMatcheType = <
@@ -47,9 +47,6 @@ Variable Output: ${printedVariable}`
   );
 };
 
-const isArray = (unknownTemplate: unknown): unknownTemplate is [any] =>
-  Array.isArray(unknownTemplate);
-
 const unknownMatchesTemplate = <ReturnType>(
   unknownVariable: unknown,
   template: TypeofToTemplate<ReturnType>,
@@ -68,12 +65,24 @@ const unknownMatchesTemplate = <ReturnType>(
     );
   }
 
-  if (isArray(template)) {
+  if (Array.isArray(template)) {
+    // If variable is undefined, check if the template allows optionals
+    if (unknownVariable === undefined) {
+      return handleResult(
+        template[1] === 'optional',
+        unknownVariable,
+        template,
+        options,
+        currentPath
+      );
+    }
+
     const value = template[0];
+
     return handleResult(
       typeofArrayItemsMatcheType(
         unknownVariable,
-        value as TypeofToTemplate<ReturnType>,
+        value as any,
         options,
         currentPath
       ),

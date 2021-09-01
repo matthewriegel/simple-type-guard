@@ -39,4 +39,12 @@ describe('array type tests', () => {
     );
     expect(result).toBe(false);
   });
+
+  test('array type guard recognizes optional - truthy', () => {
+    const result = unknownMatchesTemplate<Array<{ key: number }> | undefined>(
+      undefined,
+      [{ key: 'number' }, 'optional']
+    );
+    expect(result).toBe(true);
+  });
 });

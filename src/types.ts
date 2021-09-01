@@ -15,32 +15,42 @@ export type TypeofToType<T> = T extends 'number'
  */
 type FunctionalComparison = (item: unknown) => boolean;
 
-type OptionalCheck<
-  T,
-  TypeTS,
+type OptionalPrimitiveCheck<
+  VariableType,
+  TemplateType,
   Typeof extends TypeofValue
-> = TypeTS extends Extract<T, TypeTS>
-  ? Extract<T, undefined> extends never
+> = TemplateType extends Extract<VariableType, TemplateType>
+  ? Extract<VariableType, undefined> extends never
     ? `${Typeof}`
     : `${Typeof}?`
   : never;
 
-export type TypeToTypeof<T, Continued> = [T] extends [
+export type TypeToTypeof<VariableType, Continued> = [VariableType] extends [
   string | number | boolean | undefined
 ]
   ?
-      | OptionalCheck<T, number, 'number'>
-      | OptionalCheck<T, string, 'string'>
-      | OptionalCheck<T, boolean, 'boolean'>
-      | OptionalCheck<T, bigint, 'bigint'>
-      | OptionalCheck<T, symbol, 'symbol'>
-  : T extends [UnpackArray<T>]
-  ? [UnpackArray<T>]
+      | OptionalPrimitiveCheck<VariableType, number, 'number'>
+      | OptionalPrimitiveCheck<VariableType, string, 'string'>
+      | OptionalPrimitiveCheck<VariableType, boolean, 'boolean'>
+      | OptionalPrimitiveCheck<VariableType, bigint, 'bigint'>
+      | OptionalPrimitiveCheck<VariableType, symbol, 'symbol'>
+  : [[any]] extends [VariableType | undefined]
+  ? Extract<VariableType, undefined> extends never
+    ? [TypeofMap<UnpackArray<VariableType>>] // no undefined
+    : [TypeofMap<UnpackArray<VariableType>>, 'optional'] // undefined and array
   : Continued;
 
-type P = TypeToTypeof<number | undefined, {}>;
-type P34 = TypeToTypeof<number, {}>;
-type P2 = OptionalCheck<string | undefined, number, 'number'>;
+// type TestType = string | undefined;
+
+// type A = Extract<TestType, undefined> extends never
+//   ? 'required' // no undefined
+//   : 'optional'; // undefined and array
+
+// type P = [[any]] extends [TestType | undefined]
+//   ? Extract<TestType, undefined> extends never
+//     ? 'required' // no undefined
+//     : 'optional' // undefined and array
+//   : 'no-match'; // not array or undefined
 
 export type UnpackArray<T> = T extends (infer U)[] ? U : T;
 
