@@ -116,7 +116,7 @@ const unknownMatchesTemplate = <ReturnType>(
     );
   } else if (!isObject(unknownVariable)) {
     return handleResult(
-      (template as any).$optional,
+      '$optional' in template && template.$optional,
       unknownVariable,
       'object',
       options,
@@ -126,12 +126,14 @@ const unknownMatchesTemplate = <ReturnType>(
 
   // iterate over every template key
   for (const templateKey in template) {
-    if (!template.hasOwnProperty(templateKey)) {
+    if (!template.hasOwnProperty(templateKey) || !(templateKey in template)) {
       continue;
     }
 
     // `templateValue` is either 'string', 'number', 'boolean', 'undefined', 'function' or an object.
-    const templateValue = (template as any)[templateKey] as PropertyType;
+    const templateValue = (
+      template as unknown as Record<typeof templateKey, PropertyType>
+    )[templateKey];
     const unknownObjectValue = unknownVariable[templateKey];
 
     // If the template value is an object or function, recursively check object's value
