@@ -30,9 +30,6 @@ expectType<boolean | null>(
 expectType<number | null>(
   unknownMatchesTemplate<number>(variable, 'number') ? variable : null
 );
-expectType<undefined | null>(
-  unknownMatchesTemplate<undefined>(variable, 'undefined') ? variable : null
-);
 
 /**
  * Shallow Objects

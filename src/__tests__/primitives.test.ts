@@ -30,4 +30,28 @@ describe('primitives type tests', () => {
     const result = unknownMatchesTemplate<number>(true, 'number');
     expect(result).toBe(false);
   });
+
+  test('type guard recognizes optional strings - truthy', () => {
+    const result = unknownMatchesTemplate<string | undefined>(
+      undefined,
+      'string?'
+    );
+    expect(result).toBe(true);
+  });
+
+  test('type guard recognizes optional boolean - truthy', () => {
+    const result = unknownMatchesTemplate<boolean | undefined>(
+      undefined,
+      'boolean?'
+    );
+    expect(result).toBe(true);
+  });
+
+  test('type guard recognizes optional number - truthy', () => {
+    const result = unknownMatchesTemplate<number | undefined>(
+      undefined,
+      'number?'
+    );
+    expect(result).toBe(true);
+  });
 });

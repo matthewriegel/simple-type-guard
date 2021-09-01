@@ -15,17 +15,32 @@ export type TypeofToType<T> = T extends 'number'
  */
 type FunctionalComparison = (item: unknown) => boolean;
 
-export type TypeToTypeof<T, Continued> = T extends number
-  ? 'number'
-  : T extends string
-  ? 'string'
-  : T extends boolean
-  ? 'boolean'
-  : T extends undefined
-  ? 'undefined'
+type OptionalCheck<
+  T,
+  TypeTS,
+  Typeof extends TypeofValue
+> = TypeTS extends Extract<T, TypeTS>
+  ? Extract<T, undefined> extends never
+    ? `${Typeof}`
+    : `${Typeof}?`
+  : never;
+
+export type TypeToTypeof<T, Continued> = [T] extends [
+  string | number | boolean | undefined
+]
+  ?
+      | OptionalCheck<T, number, 'number'>
+      | OptionalCheck<T, string, 'string'>
+      | OptionalCheck<T, boolean, 'boolean'>
+      | OptionalCheck<T, bigint, 'bigint'>
+      | OptionalCheck<T, symbol, 'symbol'>
   : T extends [UnpackArray<T>]
   ? [UnpackArray<T>]
   : Continued;
+
+type P = TypeToTypeof<number | undefined, {}>;
+type P34 = TypeToTypeof<number, {}>;
+type P2 = OptionalCheck<string | undefined, number, 'number'>;
 
 export type UnpackArray<T> = T extends (infer U)[] ? U : T;
 
@@ -47,7 +62,13 @@ export type TypeofToTemplate<ReturnType> =
   | TypeofMap<ReturnType>
   | FunctionalComparison;
 
-export type TypeofValue = 'string' | 'number' | 'boolean' | 'undefined';
+export type TypeofValue =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'undefined'
+  | 'symbol'
+  | 'bigint';
 
 export interface Options {
   throwErrorOnFailure?: boolean;

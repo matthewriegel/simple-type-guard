@@ -85,9 +85,21 @@ const unknownMatchesTemplate = <ReturnType>(
   }
 
   // Unknown object must be of an object type to match the template
+  // Primitive type check
   if (!isObject(unknownVariable) && !isObject(template)) {
+    // If variable is undefined, check if the template allows optionals
+    if (unknownVariable === undefined) {
+      return handleResult(
+        template[template.length - 1] === '?',
+        unknownVariable,
+        template,
+        options,
+        currentPath
+      );
+    }
+
     return handleResult(
-      typeof unknownVariable === template,
+      template.includes(typeof unknownVariable),
       unknownVariable,
       template,
       options,
@@ -104,7 +116,7 @@ const unknownMatchesTemplate = <ReturnType>(
     }
 
     // `templateValue` is either 'string', 'number', 'boolean', 'undefined', 'function' or an object.
-    const templateValue = template[templateKey] as PropertyType;
+    const templateValue = (template as any)[templateKey] as PropertyType;
     const unknownObjectValue = unknownVariable[templateKey];
 
     // If the template value is an object or function, recursively check object's value

@@ -6,4 +6,6 @@ export const isBasicPrimitiveTypeof = (
   variable === 'string' ||
   variable === 'boolean' ||
   variable === 'number' ||
-  variable === 'undefined';
+  variable === 'undefined' ||
+  variable === 'symbol' ||
+  variable === 'bigint';
