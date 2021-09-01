@@ -19,6 +19,9 @@ expectError(unknownMatchesTemplate<boolean>(variable, 'undefined'));
 expectError(unknownMatchesTemplate<undefined>(variable, 'string'));
 expectError(unknownMatchesTemplate<undefined>(variable, 'number'));
 expectError(unknownMatchesTemplate<undefined>(variable, 'boolean'));
+expectError(unknownMatchesTemplate<string | undefined>(variable, 'string'));
+expectError(unknownMatchesTemplate<number | undefined>(variable, 'number'));
+expectError(unknownMatchesTemplate<boolean | undefined>(variable, 'boolean'));
 
 // Success
 expectType<string | null>(
@@ -30,7 +33,21 @@ expectType<boolean | null>(
 expectType<number | null>(
   unknownMatchesTemplate<number>(variable, 'number') ? variable : null
 );
-
+expectType<string | null | undefined>(
+  unknownMatchesTemplate<string | undefined>(variable, 'string?')
+    ? variable
+    : null
+);
+expectType<boolean | null | undefined>(
+  unknownMatchesTemplate<boolean | undefined>(variable, 'boolean?')
+    ? variable
+    : null
+);
+expectType<number | null | undefined>(
+  unknownMatchesTemplate<number | undefined>(variable, 'number?')
+    ? variable
+    : null
+);
 /**
  * Shallow Objects
  */
