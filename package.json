@@ -1,6 +1,6 @@
 {
   "name": "simple-type-guard",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "This module allows you to quickly and safely validate variables against a defined template, enforced by Typescript. No hasstle and easy to scan.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
