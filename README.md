@@ -38,7 +38,7 @@ simpleTypeGuard<number>(0987, 'number'); // -> true
 
 ### Objects
 
-Objects you ca write just like you would an interface!
+Objects you can write just like you would an interface!
 
 ```ts
 import simpleTypeGuard from 'simple-type-guard';
@@ -80,6 +80,26 @@ simpleTypeGuard<Foo>(
     list: [{ bar: 'number' }],
   }
 ); // -> false
+```
+
+#### Functions/Something Complicated?
+
+If you wanted to match against a complicated union type, or even a set of enums, `'simple-type-guard'` allows you to implement a function for a more specific validation test.
+
+```ts
+import simpleTypeGuard from 'simple-type-guard';
+
+interface Foo {
+  bar: 'one' | 'two' | 'three';
+}
+
+simpleTypeGuard<Foo>(
+  { bar: 'one' },
+  {
+    bar: (barVariable: unknown) =>
+      ['one', 'two', 'three'].indexOf(barVariable) !== -1,
+  }
+); // -> true
 ```
 
 ### Optionals
