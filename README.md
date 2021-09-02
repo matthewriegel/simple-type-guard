@@ -12,7 +12,7 @@ Simple Type Guard takes the guess-work out of validating unknown variables again
 
 No longer will you have to carefully review your code to make sure you're validating every detail of an object to see if it fits.
 
-Simple Type Guard will help you craft the template that perfectly matches your interface and warns you if something is missing or improperly defined.
+Simple Type Guard will help you craft the template that perfectly matches your interface and **warns you if something is missing or improperly defined**.
 
 Even better, you don't have to learn a new pattern or all the facets of a new library. The templates you match against are all standard Javascript.
 
