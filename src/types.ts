@@ -72,8 +72,16 @@ export type UnpackArray<T> = T extends (infer U)[] ? U : T;
  */
 export type TypeofMap<ReturnType> = TypeToTypeof<ReturnType>;
 
+// Similar to Required, this will ensure all properties exist. Optional properties will
+// still allow undefined however.
+type Complete<T> = {
+  [P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>>
+    ? T[P]
+    : T[P] | undefined;
+};
+
 export type TypeofToTemplate<ReturnType> =
-  | TypeofMap<ReturnType>
+  | TypeofMap<Complete<ReturnType>>
   | FunctionalComparison;
 
 export type TypeofValue =

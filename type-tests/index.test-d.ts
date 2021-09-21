@@ -159,6 +159,17 @@ expectError(
     ? variable
     : null
 );
+// Should throw error if an optional property is missing from the template
+expectError(
+  unknownMatchesTemplate<
+    | {
+        hello?: string;
+      }
+    | undefined
+  >(variable, {})
+    ? variable
+    : null
+);
 
 // Success
 expectType<{
@@ -199,6 +210,17 @@ expectType<
     hello: {
       world: 'number',
     },
+  })
+    ? variable
+    : null
+);
+expectType<{
+  hello?: string;
+} | null>(
+  unknownMatchesTemplate<{
+    hello?: string;
+  }>(variable, {
+    hello: 'string?',
   })
     ? variable
     : null

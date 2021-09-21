@@ -95,4 +95,14 @@ describe('objects type tests', () => {
     });
     expect(result).toBe(true);
   });
+
+  test('type guard recognizes optional property in object - truthy', () => {
+    const result = unknownMatchesTemplate<{ test?: string }>(
+      {},
+      {
+        test: 'string?',
+      }
+    );
+    expect(result).toBe(true);
+  });
 });
