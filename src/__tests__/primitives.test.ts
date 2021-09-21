@@ -54,4 +54,19 @@ describe('primitives type tests', () => {
     );
     expect(result).toBe(true);
   });
+
+  test('type guard recognizes optional null strings - truthy', () => {
+    const result = unknownMatchesTemplate<string | null>(null, 'string?');
+    expect(result).toBe(true);
+  });
+
+  test('type guard recognizes optional null boolean - truthy', () => {
+    const result = unknownMatchesTemplate<boolean | null>(null, 'boolean?');
+    expect(result).toBe(true);
+  });
+
+  test('type guard recognizes optional null number - truthy', () => {
+    const result = unknownMatchesTemplate<number | null>(null, 'number?');
+    expect(result).toBe(true);
+  });
 });

@@ -15,18 +15,20 @@ export type TypeofToType<T> = T extends 'number'
  */
 type FunctionalComparison = (item: unknown) => boolean;
 
+type OptionalType = undefined | null;
+
 type OptionalPrimitiveCheck<
   VariableType,
   TemplateType,
   Typeof extends TypeofValue
 > = TemplateType extends Extract<VariableType, TemplateType>
-  ? Extract<VariableType, undefined> extends never
+  ? Extract<VariableType, OptionalType> extends never
     ? `${Typeof}`
     : `${Typeof}?`
   : never;
 
 export type TypeToTypeof<VariableType> = [VariableType] extends [
-  string | number | boolean | undefined
+  string | number | boolean | OptionalType
 ]
   ?
       | OptionalPrimitiveCheck<VariableType, number, 'number'>
@@ -34,17 +36,17 @@ export type TypeToTypeof<VariableType> = [VariableType] extends [
       | OptionalPrimitiveCheck<VariableType, boolean, 'boolean'>
       | OptionalPrimitiveCheck<VariableType, bigint, 'bigint'>
       | OptionalPrimitiveCheck<VariableType, symbol, 'symbol'>
-  : [[any]] extends [VariableType | undefined]
-  ? Extract<VariableType, undefined> extends never
-    ? [TypeofToTemplate<Exclude<UnpackArray<VariableType>, undefined>>] // no undefined
+  : [[any]] extends [VariableType | OptionalType]
+  ? Extract<VariableType, OptionalType> extends never
+    ? [TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>] // no undefined
     : [
-        TypeofToTemplate<Exclude<UnpackArray<VariableType>, undefined>>,
+        TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>,
         'optional'
       ] // undefined and array
   : [Record<keyof VariableType, any>] extends [
-      Record<keyof VariableType, any> | undefined
+      Record<keyof VariableType, any> | OptionalType
     ]
-  ? Extract<VariableType, undefined> extends never
+  ? Extract<VariableType, OptionalType | null> extends never
     ? {
         [Property in keyof VariableType]: TypeofToTemplate<
           VariableType[Property]
@@ -60,25 +62,6 @@ export type TypeToTypeof<VariableType> = [VariableType] extends [
   : never;
 
 export type UnpackArray<T> = T extends (infer U)[] ? U : T;
-
-// type TEST_VARIABLE = [{ key: number }] | undefined;
-// type P = [Record<keyof TEST_VARIABLE, any>] extends [
-//   Record<keyof TEST_VARIABLE, any> | undefined
-// ]
-//   ? Extract<TEST_VARIABLE, undefined> extends never
-//     ? {
-//         [Property in keyof TEST_VARIABLE]: TypeofToTemplate<
-//           TEST_VARIABLE[Property]
-//         >;
-//       }
-//     : {
-//         [Property in keyof TEST_VARIABLE]: TypeofToTemplate<
-//           TEST_VARIABLE[Property]
-//         >;
-//       } & {
-//         $optional: true;
-//       }
-//   : never;
 
 /**
  * TypeofMap

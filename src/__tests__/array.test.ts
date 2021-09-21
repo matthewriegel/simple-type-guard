@@ -47,4 +47,12 @@ describe('array type tests', () => {
     );
     expect(result).toBe(true);
   });
+
+  test('array type guard recognizes null optional - truthy', () => {
+    const result = unknownMatchesTemplate<Array<{ key: number }> | null>(null, [
+      { key: 'number' },
+      'optional',
+    ]);
+    expect(result).toBe(true);
+  });
 });

@@ -67,7 +67,7 @@ const unknownMatchesTemplate = <ReturnType>(
 
   if (Array.isArray(template)) {
     // If variable is undefined, check if the template allows optionals
-    if (unknownVariable === undefined) {
+    if (unknownVariable === undefined || unknownVariable === null) {
       return handleResult(
         template[1] === 'optional',
         unknownVariable,
@@ -97,7 +97,7 @@ const unknownMatchesTemplate = <ReturnType>(
   // Primitive type check
   if (!isObject(unknownVariable) && !isObject(template)) {
     // If variable is undefined, check if the template allows optionals
-    if (unknownVariable === undefined) {
+    if (unknownVariable === undefined || unknownVariable === null) {
       return handleResult(
         template[template.length - 1] === '?',
         unknownVariable,

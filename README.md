@@ -118,6 +118,13 @@ simpleTypeGuard<string | undefined>(undefined, 'string?'); // -> true
 simpleTypeGuard<string | undefined>(1234, 'string?'); // -> false
 ```
 
+This will also allow for null values.
+
+```ts
+...
+simpleTypeGuard<string | null>(null, 'string?'); // -> true
+```
+
 #### Objects
 
 Objects require a new property `{ $optional: true }` to indicate they may be undefined.
