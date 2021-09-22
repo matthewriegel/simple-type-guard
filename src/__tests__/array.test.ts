@@ -43,7 +43,7 @@ describe('array type tests', () => {
   test('array type guard recognizes optional - truthy', () => {
     const result = unknownMatchesTemplate<Array<{ key: number }> | undefined>(
       undefined,
-      [{ key: 'number' }, 'optional']
+      [{ key: 'number' }, '$optional']
     );
     expect(result).toBe(true);
   });
@@ -51,7 +51,7 @@ describe('array type tests', () => {
   test('array type guard recognizes null optional - truthy', () => {
     const result = unknownMatchesTemplate<Array<{ key: number }> | null>(null, [
       { key: 'number' },
-      'optional',
+      '$optional',
     ]);
     expect(result).toBe(true);
   });

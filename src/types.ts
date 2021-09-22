@@ -1,3 +1,5 @@
+export const optionalKey = '$optional';
+
 export type TypeofToType<T> = T extends 'number'
   ? number
   : T extends 'string'
@@ -41,7 +43,7 @@ export type TypeToTypeof<VariableType> = [VariableType] extends [
     ? [TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>] // no undefined
     : [
         TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>,
-        'optional'
+        typeof optionalKey
       ] // undefined and array
   : [Record<keyof VariableType, any>] extends [
       Record<keyof VariableType, any> | OptionalType
@@ -57,7 +59,7 @@ export type TypeToTypeof<VariableType> = [VariableType] extends [
           VariableType[Property]
         >;
       } & {
-        $optional: true;
+        [optionalKey]: true;
       }
   : never;
 

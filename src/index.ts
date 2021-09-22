@@ -1,5 +1,11 @@
 import { isObject } from './object';
-import { Options, TypeofToTemplate, TypeofToType, UnpackArray } from './types';
+import {
+  optionalKey,
+  Options,
+  TypeofToTemplate,
+  TypeofToType,
+  UnpackArray,
+} from './types';
 export type { TypeofToTemplate } from './types';
 
 const typeofArrayItemsMatcheType = <
@@ -69,7 +75,7 @@ const unknownMatchesTemplate = <ReturnType>(
     // If variable is undefined, check if the template allows optionals
     if (unknownVariable === undefined || unknownVariable === null) {
       return handleResult(
-        template[1] === 'optional',
+        template[1] === optionalKey,
         unknownVariable,
         template,
         options,
@@ -116,7 +122,8 @@ const unknownMatchesTemplate = <ReturnType>(
     );
   } else if (!isObject(unknownVariable)) {
     return handleResult(
-      '$optional' in template && template.$optional,
+      optionalKey in template &&
+        (template as { $optional: boolean })[optionalKey],
       unknownVariable,
       'object',
       options,
@@ -126,7 +133,11 @@ const unknownMatchesTemplate = <ReturnType>(
 
   // iterate over every template key
   for (const templateKey in template) {
-    if (!template.hasOwnProperty(templateKey) || !(templateKey in template)) {
+    if (
+      !template.hasOwnProperty(templateKey) ||
+      !(templateKey in template) ||
+      templateKey === optionalKey
+    ) {
       continue;
     }
 

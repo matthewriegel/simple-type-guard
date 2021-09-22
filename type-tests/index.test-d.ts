@@ -268,7 +268,7 @@ expectType<[[{ key: string }]] | null>(
 expectType<[{ key: string }] | null | undefined>(
   unknownMatchesTemplate<[{ key: string }] | undefined>(variable, [
     { key: 'string' },
-    'optional',
+    '$optional',
   ])
     ? variable
     : null
@@ -277,7 +277,7 @@ expectType<[{ key: string }] | null | undefined>(
 expectType<[{ key: string }] | null>(
   unknownMatchesTemplate<[{ key: string }] | null>(variable, [
     { key: 'string' },
-    'optional',
+    '$optional',
   ])
     ? variable
     : null

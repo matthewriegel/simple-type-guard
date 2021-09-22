@@ -96,6 +96,17 @@ describe('objects type tests', () => {
     expect(result).toBe(true);
   });
 
+  test('type guard recognizes optional filled object - truthy', () => {
+    const result = unknownMatchesTemplate<ObjectType<boolean> | null>(
+      { test: true },
+      {
+        $optional: true,
+        test: 'boolean',
+      }
+    );
+    expect(result).toBe(true);
+  });
+
   test('type guard recognizes optional property in object - truthy', () => {
     const result = unknownMatchesTemplate<{ test?: string }>(
       {},
