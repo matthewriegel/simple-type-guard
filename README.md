@@ -141,7 +141,7 @@ simpleTypeGuard<Foo | undefined>(undefined, { bar: 'number', $optional: true });
 
 #### Arrays
 
-Optional arrays will require an `'optional'`
+Optional arrays will require an `'$optional'` in index [1]
 
 ```ts
 import simpleTypeGuard from 'simple-type-guard';
@@ -157,7 +157,7 @@ interface Foo {
 simpleTypeGuard<Foo>(
   { list: undefined },
   {
-    list: [{ bar: 'number' }, 'optional'],
+    list: [{ bar: 'number' }, '$optional'],
   }
 ); // -> true
 ```
