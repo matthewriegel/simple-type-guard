@@ -168,7 +168,24 @@ const simpleTypeGuard = <ReturnType>(
   unknownVariable: unknown,
   template: TypeofToTemplate<ReturnType>,
   options: Options = {}
-): unknownVariable is ReturnType =>
-  unknownMatchesTemplate(unknownVariable, template, options, '_root_');
+): unknownVariable is ReturnType => {
+  try {
+    const result = unknownMatchesTemplate(
+      unknownVariable,
+      template,
+      options,
+      '_root_'
+    );
+    return result;
+  } catch (error) {
+    // attempt to reset the error stack
+    if (simpleTypeGuard<Pick<Error, 'message'>>(error, { message: 'string' })) {
+      throw new Error(error.message);
+    }
+
+    // If there is no message, just rethrow
+    throw error;
+  }
+};
 
 export default simpleTypeGuard;
