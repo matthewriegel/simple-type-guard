@@ -116,4 +116,24 @@ describe('objects type tests', () => {
     );
     expect(result).toBe(true);
   });
+
+  test('type guard recognizes Error object as invalid', () => {
+    const result = unknownMatchesTemplate<Error>(undefined, {
+      message: 'string',
+      name: 'string',
+      stack: 'string?',
+    });
+
+    expect(result).toBe(false);
+  });
+
+  test('type guard recognizes Error object as valid', () => {
+    const result = unknownMatchesTemplate<Error>(new Error('test'), {
+      message: 'string',
+      name: 'string',
+      stack: 'string?',
+    });
+
+    expect(result).toBe(true);
+  });
 });
