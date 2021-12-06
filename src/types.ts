@@ -1,12 +1,39 @@
+import { SimpleArray, SimpleArrayType } from './SimpleArray';
+import SimpleBigInt from './SimpleBigInt';
+import SimpleBigIntOptional from './SimpleBigIntOptional';
+import SimpleBoolean from './SimpleBoolean';
+import SimpleBooleanOptional from './SimpleBooleanOptional';
+import SimpleNull from './SimpleNull';
+import SimpleNumber from './SimpleNumber';
+import SimpleNumberOptional from './SimpleNumberOptional';
+import SimpleString from './SimpleString';
+import SimpleStringOptional from './SimpleStringOptional';
+import SimpleSymbol from './SimpleSymbol';
+import SimpleSymbolOptional from './SimpleSymbolOptional';
+import SimpleUndefined from './SimpleUndefined';
+
 export const optionalKey = '$optional';
 
-export type TypeofToType<T> = T extends 'number'
+export type AllValidators =
+  | typeof SimpleString
+  | typeof SimpleBigInt
+  | typeof SimpleBoolean
+  | typeof SimpleNumber
+  | typeof SimpleSymbol
+  | typeof SimpleUndefined;
+// | typeof SimpleArrayInnerClass;
+
+export type TypeofToType<T> = T extends SimpleNumber
   ? number
-  : T extends 'string'
+  : T extends SimpleString
   ? string
-  : T extends 'boolean'
+  : T extends SimpleBoolean
   ? boolean
-  : T extends 'undefined'
+  : T extends SimpleBigInt
+  ? bigint
+  : T extends SimpleSymbol
+  ? symbol
+  : T extends SimpleUndefined
   ? undefined
   : never;
 
@@ -19,49 +46,92 @@ type FunctionalComparison = (item: unknown) => boolean;
 
 type OptionalType = undefined | null;
 
-type OptionalPrimitiveCheck<
-  VariableType,
-  TemplateType,
-  Typeof extends TypeofValue
-> = TemplateType extends Extract<VariableType, TemplateType>
-  ? Extract<VariableType, OptionalType> extends never
-    ? `${Typeof}`
-    : `${Typeof}?`
+export type TypeToTypeof<VariableType> = true extends true
+  ? //
+    Exclude<VariableType, string> extends never
+    ? typeof SimpleString
+    : //
+    Exclude<VariableType, number> extends never
+    ? typeof SimpleNumber
+    : //
+    Exclude<VariableType, boolean> extends never
+    ? typeof SimpleBoolean
+    : //
+    Exclude<VariableType, bigint> extends never
+    ? typeof SimpleBigInt
+    : //
+    Exclude<VariableType, symbol> extends never
+    ? typeof SimpleSymbol
+    : //
+    Exclude<VariableType, undefined> extends never
+    ? typeof SimpleUndefined
+    : //
+    Exclude<VariableType, null> extends never
+    ? typeof SimpleNull
+    : //
+    Exclude<VariableType, string | null | undefined> extends never
+    ? typeof SimpleStringOptional
+    : //
+    Exclude<VariableType, number | null | undefined> extends never
+    ? typeof SimpleNumberOptional
+    : //
+    Exclude<VariableType, boolean | null | undefined> extends never
+    ? typeof SimpleBooleanOptional
+    : //
+    Exclude<VariableType, bigint | null | undefined> extends never
+    ? typeof SimpleBigIntOptional
+    : //
+    Exclude<VariableType, symbol | null | undefined> extends never
+    ? typeof SimpleSymbolOptional
+    : //
+    Exclude<
+        VariableType,
+        VariableType extends unknown[] ? VariableType : never
+      > extends never
+    ? ReturnType<SimpleArrayType<UnpackArray<VariableType>>>
+    : //
+      never
   : never;
 
-export type TypeToTypeof<VariableType> = [VariableType] extends [
-  string | number | boolean | OptionalType
-]
-  ?
-      | OptionalPrimitiveCheck<VariableType, number, 'number'>
-      | OptionalPrimitiveCheck<VariableType, string, 'string'>
-      | OptionalPrimitiveCheck<VariableType, boolean, 'boolean'>
-      | OptionalPrimitiveCheck<VariableType, bigint, 'bigint'>
-      | OptionalPrimitiveCheck<VariableType, symbol, 'symbol'>
-  : [[any]] extends [VariableType | OptionalType]
-  ? Extract<VariableType, OptionalType> extends never
-    ? [TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>] // no undefined
-    : [
-        TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>,
-        typeof optionalKey
-      ] // undefined and array
-  : [Record<keyof VariableType, any>] extends [
-      Record<keyof VariableType, any> | OptionalType
-    ]
-  ? Extract<VariableType, OptionalType | null> extends never
-    ? {
-        [Property in keyof VariableType]: TypeofToTemplate<
-          VariableType[Property]
-        >;
-      }
-    : {
-        [Property in keyof VariableType]: TypeofToTemplate<
-          VariableType[Property]
-        >;
-      } & {
-        [optionalKey]: true;
-      }
-  : never;
+type TestType = string[];
+
+const templateBad: TypeToTypeof<TestType> = SimpleString;
+const templateGood: TypeToTypeof<TestType> = SimpleArray(SimpleString);
+const templateGood2: TypeToTypeof<TestType> = SimpleArray(SimpleNumber);
+
+type Thing = Exclude<string, never>;
+
+//     | OptionalPrimitiveCheck<VariableType, number, 'number'>
+//     | OptionalPrimitiveCheck<VariableType, string, 'string'>
+//     | OptionalPrimitiveCheck<VariableType, boolean, 'boolean'>
+//     | OptionalPrimitiveCheck<VariableType, bigint, 'bigint'>
+//     | OptionalPrimitiveCheck<VariableType, symbol, 'symbol'>
+// : [[any]] extends [VariableType | OptionalType]
+// ? Extract<VariableType, OptionalType> extends never
+//   ? [TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>] // no undefined
+//   : [
+//       TypeofToTemplate<Exclude<UnpackArray<VariableType>, OptionalType>>,
+//       typeof optionalKey
+//     ] // undefined and array
+// : [Record<keyof VariableType, any>] extends [
+//     Record<keyof VariableType, any> | OptionalType
+//   ]
+// ? Extract<VariableType, OptionalType | null> extends never
+//   ? {
+//       [Property in keyof VariableType]: TypeofToTemplate<
+//         VariableType[Property]
+//       >;
+//     }
+//   : {
+//       [Property in keyof VariableType]: TypeofToTemplate<
+//         VariableType[Property]
+//       >;
+//     } & {
+//       [optionalKey]: true;
+//     }
+// : never;
+
+type X = Exclude<string, never>;
 
 export type UnpackArray<T> = T extends (infer U)[] ? U : T;
 
