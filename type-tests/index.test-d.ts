@@ -282,3 +282,6 @@ expectType<[{ key: string }] | null>(
     ? variable
     : null
 );
+
+// CHECK INVALID
+// SimpleArrayFunction([[SimpleString]])

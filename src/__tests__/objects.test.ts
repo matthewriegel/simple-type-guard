@@ -1,4 +1,9 @@
 import unknownMatchesTemplate from '..';
+import SimpleBoolean from '../SimpleBoolean';
+import SimpleNumber from '../SimpleNumber';
+import { SimpleObjectOptionalFunction } from '../SimpleObjectOptional';
+import SimpleString from '../SimpleString';
+import SimpleStringOptional from '../SimpleStringOptional';
 
 interface ObjectType<T> {
   test: T;
@@ -9,7 +14,7 @@ describe('objects type tests', () => {
     const result = unknownMatchesTemplate<ObjectType<string>>(
       { test: 'hello' },
       {
-        test: 'string',
+        test: SimpleString,
       }
     );
     expect(result).toBe(true);
@@ -19,7 +24,7 @@ describe('objects type tests', () => {
     const result = unknownMatchesTemplate<ObjectType<string>>(
       { test: true },
       {
-        test: 'string',
+        test: SimpleString,
       }
     );
     expect(result).toBe(false);
@@ -29,7 +34,7 @@ describe('objects type tests', () => {
     const result = unknownMatchesTemplate<ObjectType<number>>(
       { test: 4 },
       {
-        test: 'number',
+        test: SimpleNumber,
       }
     );
     expect(result).toBe(true);
@@ -39,7 +44,7 @@ describe('objects type tests', () => {
     const result = unknownMatchesTemplate<ObjectType<number>>(
       { test: true },
       {
-        test: 'number',
+        test: SimpleNumber,
       }
     );
     expect(result).toBe(false);
@@ -49,7 +54,7 @@ describe('objects type tests', () => {
     const result = unknownMatchesTemplate<ObjectType<boolean>>(
       { test: true },
       {
-        test: 'boolean',
+        test: SimpleBoolean,
       }
     );
     expect(result).toBe(true);
@@ -59,7 +64,7 @@ describe('objects type tests', () => {
     const result = unknownMatchesTemplate<ObjectType<boolean>>(
       { test: 'true' },
       {
-        test: 'boolean',
+        test: SimpleBoolean,
       }
     );
     expect(result).toBe(false);
@@ -70,7 +75,7 @@ describe('objects type tests', () => {
       unknownMatchesTemplate<ObjectType<boolean>>(
         { test: 'true' },
         {
-          test: 'boolean',
+          test: SimpleBoolean,
         },
         { throwErrorOnFailure: true }
       )
@@ -80,29 +85,29 @@ describe('objects type tests', () => {
   test('type guard recognizes optional object - truthy', () => {
     const result = unknownMatchesTemplate<ObjectType<boolean> | undefined>(
       undefined,
-      {
-        $optional: true,
-        test: 'boolean',
-      }
+      SimpleObjectOptionalFunction<ObjectType<boolean>>({
+        test: SimpleBoolean,
+      })
     );
     expect(result).toBe(true);
   });
 
   test('type guard recognizes optional null object - truthy', () => {
-    const result = unknownMatchesTemplate<ObjectType<boolean> | null>(null, {
-      $optional: true,
-      test: 'boolean',
-    });
+    const result = unknownMatchesTemplate<ObjectType<boolean> | null>(
+      null,
+      SimpleObjectOptionalFunction<ObjectType<boolean>>({
+        test: SimpleBoolean,
+      })
+    );
     expect(result).toBe(true);
   });
 
   test('type guard recognizes optional filled object - truthy', () => {
     const result = unknownMatchesTemplate<ObjectType<boolean> | null>(
       { test: true },
-      {
-        $optional: true,
-        test: 'boolean',
-      }
+      SimpleObjectOptionalFunction<ObjectType<boolean>>({
+        test: SimpleBoolean,
+      })
     );
     expect(result).toBe(true);
   });
@@ -111,7 +116,7 @@ describe('objects type tests', () => {
     const result = unknownMatchesTemplate<{ test?: string }>(
       {},
       {
-        test: 'string?',
+        test: SimpleStringOptional,
       }
     );
     expect(result).toBe(true);
@@ -119,9 +124,9 @@ describe('objects type tests', () => {
 
   test('type guard recognizes Error object as invalid', () => {
     const result = unknownMatchesTemplate<Error>(undefined, {
-      message: 'string',
-      name: 'string',
-      stack: 'string?',
+      message: SimpleString,
+      name: SimpleString,
+      stack: SimpleStringOptional,
     });
 
     expect(result).toBe(false);
@@ -129,9 +134,9 @@ describe('objects type tests', () => {
 
   test('type guard recognizes Error object as valid', () => {
     const result = unknownMatchesTemplate<Error>(new Error('test'), {
-      message: 'string',
-      name: 'string',
-      stack: 'string?',
+      message: SimpleString,
+      name: SimpleString,
+      stack: SimpleStringOptional,
     });
 
     expect(result).toBe(true);

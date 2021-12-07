@@ -14,8 +14,6 @@ abstract class AbstractValidator<Type> {
   ): boolean;
 
   abstract get label(): string;
-
-  abstract get type(): 'primitive' | 'complex';
 }
 
 export default AbstractValidator;

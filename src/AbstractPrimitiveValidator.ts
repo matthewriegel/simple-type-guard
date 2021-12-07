@@ -9,7 +9,7 @@ abstract class AbstractPrimitiveValidator<
     super(typeofValue);
   }
 
-  get label() {
+  get label(): string {
     return this.parameter;
   }
 
@@ -21,10 +21,6 @@ abstract class AbstractPrimitiveValidator<
       options,
       currentPath
     );
-  }
-
-  get type() {
-    return 'primitive' as const;
   }
 }
 

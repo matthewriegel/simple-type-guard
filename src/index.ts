@@ -1,14 +1,5 @@
-import { isObject } from './object';
 import SimpleString from './SimpleString';
-import {
-  AllValidators,
-  optionalKey,
-  Options,
-  TypeofToTemplate,
-  TypeofToType,
-  UnpackArray,
-} from './types';
-import AbstractValidator from './AbstractValidator';
+import { Options, TypeofToTemplate } from './types';
 import { unknownMatchesTemplate } from './unknownMatchesTemplate';
 export type { TypeofToTemplate } from './types';
 
@@ -27,7 +18,9 @@ const simpleTypeGuard = <ReturnType>(
     return result;
   } catch (error) {
     // attempt to reset the error stack
-    if (simpleTypeGuard<Pick<Error, 'message'>>(error, { message: 'string' })) {
+    if (
+      simpleTypeGuard<Pick<Error, 'message'>>(error, { message: SimpleString })
+    ) {
       throw new Error(error.message);
     }
 

@@ -1,11 +1,12 @@
 import unknownMatchesTemplate from '..';
+import { SimpleFunctionFunction } from '../SimpleFunction';
 
 describe('function type tests', () => {
   test('function type guard recognizes string - truthy', () => {
     const result = unknownMatchesTemplate<{ hello: string }>(
       { hello: 'thing' },
       {
-        hello: item => typeof item === 'string',
+        hello: SimpleFunctionFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(true);
@@ -15,7 +16,7 @@ describe('function type tests', () => {
     const result = unknownMatchesTemplate<{ hello: string | number }>(
       { hello: 'thing' },
       {
-        hello: item => typeof item === 'string',
+        hello: SimpleFunctionFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(true);
@@ -25,7 +26,7 @@ describe('function type tests', () => {
     const result = unknownMatchesTemplate<{ hello: { test: 'string' } }>(
       { hello: {} },
       {
-        hello: item => typeof item === 'object',
+        hello: SimpleFunctionFunction(item => typeof item === 'object'),
       }
     );
     expect(result).toBe(true);
@@ -35,7 +36,7 @@ describe('function type tests', () => {
     const result = unknownMatchesTemplate<{ hello: string }>(
       { hello: 4 },
       {
-        hello: item => typeof item === 'string',
+        hello: SimpleFunctionFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(false);
@@ -45,7 +46,7 @@ describe('function type tests', () => {
     const result = unknownMatchesTemplate<{ hello: string | number }>(
       { hello: {} },
       {
-        hello: item => typeof item === 'string',
+        hello: SimpleFunctionFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(false);
@@ -55,7 +56,7 @@ describe('function type tests', () => {
     const result = unknownMatchesTemplate<{ hello: { test: 'string' } }>(
       { hello: 'test' },
       {
-        hello: item => typeof item === 'object',
+        hello: SimpleFunctionFunction(item => typeof item === 'object'),
       }
     );
     expect(result).toBe(false);

@@ -1,4 +1,3 @@
-import AbstractPrimitiveValidator from './AbstractPrimitiveValidator';
 import AbstractValidator from './AbstractValidator';
 import { Options } from './types';
 import { handleResult } from './unknownMatchesTemplate';
@@ -22,9 +21,7 @@ class SimpleNull extends AbstractValidator<null> {
     );
   }
 
-  get type() {
-    return 'primitive' as const;
-  }
+  public static isPrimitive = true;
 }
 
 export default SimpleNull;
