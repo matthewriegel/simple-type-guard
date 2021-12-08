@@ -16,102 +16,61 @@ import SimpleSymbol from './SimpleSymbol';
 import SimpleSymbolOptional from './SimpleSymbolOptional';
 import SimpleUndefined from './SimpleUndefined';
 
-export const optionalKey = '$optional';
-
-export type PrimitiveClassValidators =
-  | typeof SimpleString
-  | typeof SimpleBigInt
-  | typeof SimpleBoolean
-  | typeof SimpleNumber
-  | typeof SimpleSymbol
-  | typeof SimpleUndefined
-  | typeof SimpleNull;
-// | typeof SimpleArrayInnerClass;
-
-export type TypeofToType<T> = T extends SimpleNumber
-  ? number
-  : T extends SimpleString
-  ? string
-  : T extends SimpleBoolean
-  ? boolean
-  : T extends SimpleBigInt
-  ? bigint
-  : T extends SimpleSymbol
-  ? symbol
-  : T extends SimpleUndefined
-  ? undefined
+type IsType<VariableType, ComparisonTime, IfTrueType> = Exclude<
+  VariableType,
+  ComparisonTime
+> extends never
+  ? IfTrueType
   : never;
 
-export type ComplexClassValidators<ReturnType> =
-  | SimpleObjectOptionalInnerClass<ReturnType>
-  | SimpleArrayInnerClass<ReturnType>
-  | SimpleArrayOptionalInnerClass<ReturnType>;
+type IsOptionalType<VariableType, ComparisonTime, IfTrueType> = IsType<
+  VariableType,
+  ComparisonTime | null | undefined,
+  IfTrueType
+>;
 
 export type TypeToTypeof<VariableType> =
   | SimpleFunctionInnerClass
-  | SimpleSkip
-  | (Exclude<VariableType, string> extends never
-      ? typeof SimpleString
-      : // Number
-      Exclude<VariableType, number> extends never
-      ? typeof SimpleNumber
-      : // Boolean
-      Exclude<VariableType, boolean> extends never
-      ? typeof SimpleBoolean
-      : // BigInt
-      Exclude<VariableType, bigint> extends never
-      ? typeof SimpleBigInt
-      : // Symbol
-      Exclude<VariableType, symbol> extends never
-      ? typeof SimpleSymbol
-      : // Undefined
-      Exclude<VariableType, undefined> extends never
-      ? typeof SimpleUndefined
-      : // Null
-      Exclude<VariableType, null> extends never
-      ? typeof SimpleNull
-      : // String | Undefined | Null
-      Exclude<VariableType, string | null | undefined> extends never
-      ? typeof SimpleStringOptional
-      : // Number | Undefined | Null
-      Exclude<VariableType, number | null | undefined> extends never
-      ? typeof SimpleNumberOptional
-      : // Boolean | Undefined | Null
-      Exclude<VariableType, boolean | null | undefined> extends never
-      ? typeof SimpleBooleanOptional
-      : // BigInt | Undefined | Null
-      Exclude<VariableType, bigint | null | undefined> extends never
-      ? typeof SimpleBigIntOptional
-      : // Symbol | Undefined | Null
-      Exclude<VariableType, symbol | null | undefined> extends never
-      ? typeof SimpleSymbolOptional
-      : // []
-      Exclude<
-          VariableType,
-          VariableType extends unknown[] ? VariableType : never
-        > extends never
-      ? SimpleArrayInnerClass<UnpackArray<VariableType>>
-      : // [] | undefined | null
-      Exclude<
-          VariableType,
-          VariableType extends unknown[]
-            ? VariableType | null | undefined
-            : never
-        > extends never
-      ? SimpleArrayOptionalInnerClass<
-          UnpackArray<Exclude<VariableType, null | undefined>>
-        >
-      : // { [keyof]: unknown }
-      Exclude<VariableType, Record<string, unknown>> extends never
-      ? TypeToTypeofObject<VariableType>
-      : // { [keyof]: unknown } | undefined | null
-      Exclude<
-          VariableType,
-          Record<string, unknown> | null | undefined
-        > extends never
-      ? SimpleObjectOptionalInnerClass<Exclude<VariableType, null | undefined>>
-      : //
-        never);
+  | typeof SimpleSkip
+  | IsType<VariableType, string, typeof SimpleString>
+  | IsType<VariableType, number, typeof SimpleNumber>
+  | IsType<VariableType, boolean, typeof SimpleBoolean>
+  | IsType<VariableType, bigint, typeof SimpleBigInt>
+  | IsType<VariableType, symbol, typeof SimpleSymbol>
+  | IsType<VariableType, undefined, typeof SimpleUndefined>
+  | IsType<VariableType, null, typeof SimpleNull>
+  | IsOptionalType<VariableType, string, typeof SimpleStringOptional>
+  | IsOptionalType<VariableType, number, typeof SimpleNumberOptional>
+  | IsOptionalType<VariableType, boolean, typeof SimpleBooleanOptional>
+  | IsOptionalType<VariableType, bigint, typeof SimpleBigIntOptional>
+  | IsOptionalType<VariableType, symbol, typeof SimpleSymbolOptional>
+  | IsType<
+      // T[]
+      VariableType,
+      unknown[],
+      SimpleArrayInnerClass<UnpackArray<VariableType>>
+    >
+  | IsOptionalType<
+      // T[] | null | undefined
+      VariableType,
+      unknown[],
+      SimpleArrayOptionalInnerClass<
+        UnpackArray<Exclude<VariableType, null | undefined>>
+      >
+    >
+  | IsType<
+      // { [keyof]: unknown }
+      VariableType,
+      Record<string, unknown>,
+      TypeToTypeofObject<VariableType>
+    >
+  | IsOptionalType<
+      // { [keyof]: unknown } | null | undefined
+      VariableType,
+      Record<string, unknown>,
+      SimpleObjectOptionalInnerClass<Exclude<VariableType, null | undefined>>
+    >
+  | never;
 
 export type UnpackArray<T> = T extends (infer U)[] ? U : T;
 

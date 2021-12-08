@@ -1,6 +1,6 @@
 import AbstractValidator from './AbstractValidator';
 
-class SimpleSkip extends AbstractValidator<any> {
+class SimpleSkip extends AbstractValidator<unknown> {
   label = 'skipped';
 
   validate() {

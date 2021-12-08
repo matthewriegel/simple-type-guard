@@ -1,5 +1,6 @@
 import unknownMatchesTemplate from '..';
 import { SimpleFunctionFunction } from '../SimpleFunction';
+import SimpleSkip from '../SimpleSkip';
 
 describe('function type tests', () => {
   test('function type guard recognizes string - truthy', () => {
@@ -60,5 +61,15 @@ describe('function type tests', () => {
       }
     );
     expect(result).toBe(false);
+  });
+
+  test('SimpleSkip ignores invalid type', () => {
+    const result = unknownMatchesTemplate<{ hello: { test: 'string' } }>(
+      { hello: 4 },
+      {
+        hello: SimpleSkip,
+      }
+    );
+    expect(result).toBe(true);
   });
 });

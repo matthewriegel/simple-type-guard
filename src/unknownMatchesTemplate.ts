@@ -1,10 +1,6 @@
 import { TypeofToTemplate } from 'src';
 import { objectAndContentsMatchTemplate } from './object';
-import {
-  ComplexClassValidators,
-  Options,
-  PrimitiveClassValidators,
-} from './types';
+import { Options } from './types';
 
 export const handleResult = (
   result: boolean,
@@ -40,18 +36,14 @@ export const unknownMatchesTemplate = <ReturnType>(
   currentPath: string
 ): unknownVariable is ReturnType => {
   if (typeof template === 'function') {
-    const resultClass = new (template as PrimitiveClassValidators)();
+    const resultClass = new template(undefined);
     return resultClass.validate(unknownVariable, options, currentPath);
   } else if (
     typeof template === 'object' &&
     'validate' in template &&
     typeof template.validate === 'function'
   ) {
-    return (template as ComplexClassValidators<unknown>).validate(
-      unknownVariable,
-      options,
-      currentPath
-    );
+    return template.validate(unknownVariable, options, currentPath);
   } else {
     return objectAndContentsMatchTemplate(
       unknownVariable,

@@ -7,6 +7,7 @@ import SimpleBooleanOptional from '../src/SimpleBooleanOptional';
 import SimpleNumber from '../src/SimpleNumber';
 import SimpleNumberOptional from '../src/SimpleNumberOptional';
 import { SimpleObjectOptionalFunction } from '../src/SimpleObjectOptional';
+import SimpleSkip from '../src/SimpleSkip';
 import SimpleString from '../src/SimpleString';
 import SimpleStringOptional from '../src/SimpleStringOptional';
 import SimpleUndefined from '../src/SimpleUndefined';
@@ -324,5 +325,20 @@ expectType<[{ key: string }] | null>(
     : null
 );
 
-// CHECK INVALID
-// SimpleArrayFunction([[SimpleString]])
+/**
+ * SimpleSkip
+ */
+expectError(
+  unknownMatchesTemplate<{ key: { foo: string } }>(variable, {
+    key: new SimpleSkip({}),
+  })
+    ? variable
+    : null
+);
+expectType<{ key: { foo: string } } | null>(
+  unknownMatchesTemplate<{ key: { foo: string } }>(variable, {
+    key: SimpleSkip,
+  })
+    ? variable
+    : null
+);

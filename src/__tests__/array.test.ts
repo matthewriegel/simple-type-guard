@@ -22,7 +22,7 @@ describe('array type tests', () => {
   });
 
   test('array type guard recognizes nested array string - truthy', () => {
-    const result = unknownMatchesTemplate<Array<string[]>>(
+    const result = unknownMatchesTemplate<string[][]>(
       [['hello']],
       SimpleArrayFunction<string[]>(SimpleArrayFunction<string>(SimpleString))
     );
@@ -30,7 +30,7 @@ describe('array type tests', () => {
   });
 
   test('array type guard recognizes nested array string - falsy', () => {
-    const result = unknownMatchesTemplate<Array<string[]>>(
+    const result = unknownMatchesTemplate<string[][]>(
       [[3]],
       SimpleArrayFunction<string[]>(SimpleArrayFunction<string>(SimpleString))
     );
@@ -38,7 +38,7 @@ describe('array type tests', () => {
   });
 
   test('array type guard recognizes object - truthy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }>>(
+    const result = unknownMatchesTemplate<{ key: number }[]>(
       [{ key: 123 }, { key: 123984 }],
       SimpleArrayFunction<{ key: number }>({ key: SimpleNumber })
     );
@@ -46,7 +46,7 @@ describe('array type tests', () => {
   });
 
   test('array type guard recognizes object - falsy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }>>(
+    const result = unknownMatchesTemplate<{ key: number }[]>(
       [{ key: 123 }, { key: 'invalid' }],
       SimpleArrayFunction<{ key: number }>({ key: SimpleNumber })
     );
@@ -54,7 +54,7 @@ describe('array type tests', () => {
   });
 
   test('array type guard recognizes optional - truthy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }> | undefined>(
+    const result = unknownMatchesTemplate<{ key: number }[] | undefined>(
       undefined,
       SimpleArrayOptionalFunction<{ key: number }>({ key: SimpleNumber })
     );
@@ -62,7 +62,7 @@ describe('array type tests', () => {
   });
 
   test('array type guard recognizes null optional - truthy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }> | null>(
+    const result = unknownMatchesTemplate<{ key: number }[] | null>(
       null,
       SimpleArrayOptionalFunction<{ key: number }>({ key: SimpleNumber })
     );
