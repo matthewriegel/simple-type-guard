@@ -61,13 +61,13 @@ export type TypeToTypeof<VariableType> =
   | IsType<
       // { [keyof]: unknown }
       VariableType,
-      Record<string, unknown>,
+      ExractObject<VariableType>,
       TypeToTypeofObject<VariableType>
     >
   | IsOptionalType<
       // { [keyof]: unknown } | null | undefined
       VariableType,
-      Record<string, unknown>,
+      ExractObject<VariableType>,
       SimpleObjectOptionalInnerClass<Exclude<VariableType, null | undefined>>
     >
   | never;
@@ -77,6 +77,22 @@ export type UnpackArray<T> = T extends (infer U)[] ? U : T;
 export type TypeToTypeofObject<T> = {
   [Key in keyof T]: TypeToTypeof<T[Key]>;
 };
+
+type ExractObject<T> = {
+  [Key in keyof RemovePrimitivesAndArrays<T>]: RemovePrimitivesAndArrays<T>[Key];
+};
+
+type RemovePrimitivesAndArrays<T> = Exclude<
+  T,
+  | string
+  | number
+  | boolean
+  | bigint
+  | symbol
+  | null
+  | undefined
+  | UnpackArray<T>[]
+>;
 
 // Similar to Required, this will ensure all properties exist.
 // Optional properties will still retain undefined.
@@ -94,8 +110,6 @@ type Complete<T> = {
  * - { key: string } => { key: SimpleString }
  */
 export type TypeofToTemplate<ReturnType> = TypeToTypeof<Complete<ReturnType>>;
-
-// | FunctionalComparison;
 
 export type TypeofValue =
   | 'string'

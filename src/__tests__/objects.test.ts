@@ -142,4 +142,17 @@ describe('objects type tests', () => {
 
     expect(result).toBe(true);
   });
+
+  test('type guard recognized deep type', () => {
+    const result = simpleTypeGuard<ObjectType<ObjectType<string>>>(
+      { test: { test: 'hello' } },
+      {
+        test: {
+          test: SimpleString,
+        },
+      }
+    );
+
+    expect(result).toBe(true);
+  });
 });
