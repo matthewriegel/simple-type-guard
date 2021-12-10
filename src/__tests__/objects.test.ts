@@ -1,9 +1,10 @@
-import unknownMatchesTemplate from '..';
-import SimpleBoolean from '../SimpleBoolean';
-import SimpleNumber from '../SimpleNumber';
-import { SimpleObjectOptionalFunction } from '../SimpleObjectOptional';
-import SimpleString from '../SimpleString';
-import SimpleStringOptional from '../SimpleStringOptional';
+import simpleTypeGuard, {
+  SimpleBoolean,
+  SimpleNumber,
+  SimpleObjectOptional,
+  SimpleString,
+  SimpleStringOptional,
+} from '..';
 
 interface ObjectType<T> {
   test: T;
@@ -11,7 +12,7 @@ interface ObjectType<T> {
 
 describe('objects type tests', () => {
   test('type guard recognizes object with string key/value - truthy', () => {
-    const result = unknownMatchesTemplate<ObjectType<string>>(
+    const result = simpleTypeGuard<ObjectType<string>>(
       { test: 'hello' },
       {
         test: SimpleString,
@@ -21,7 +22,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes object with string key/value - falsy', () => {
-    const result = unknownMatchesTemplate<ObjectType<string>>(
+    const result = simpleTypeGuard<ObjectType<string>>(
       { test: true },
       {
         test: SimpleString,
@@ -31,7 +32,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes object with number key/value - truthy', () => {
-    const result = unknownMatchesTemplate<ObjectType<number>>(
+    const result = simpleTypeGuard<ObjectType<number>>(
       { test: 4 },
       {
         test: SimpleNumber,
@@ -41,7 +42,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes object with string key/value - falsy', () => {
-    const result = unknownMatchesTemplate<ObjectType<number>>(
+    const result = simpleTypeGuard<ObjectType<number>>(
       { test: true },
       {
         test: SimpleNumber,
@@ -51,7 +52,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes object with numbooleanber key/value - truthy', () => {
-    const result = unknownMatchesTemplate<ObjectType<boolean>>(
+    const result = simpleTypeGuard<ObjectType<boolean>>(
       { test: true },
       {
         test: SimpleBoolean,
@@ -61,7 +62,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes object with boolean key/value - falsy', () => {
-    const result = unknownMatchesTemplate<ObjectType<boolean>>(
+    const result = simpleTypeGuard<ObjectType<boolean>>(
       { test: 'true' },
       {
         test: SimpleBoolean,
@@ -72,7 +73,7 @@ describe('objects type tests', () => {
 
   test('type guard throws error on object with boolean key/value - falsy', () => {
     expect(() =>
-      unknownMatchesTemplate<ObjectType<boolean>>(
+      simpleTypeGuard<ObjectType<boolean>>(
         { test: 'true' },
         {
           test: SimpleBoolean,
@@ -83,9 +84,9 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes optional object - truthy', () => {
-    const result = unknownMatchesTemplate<ObjectType<boolean> | undefined>(
+    const result = simpleTypeGuard<ObjectType<boolean> | undefined>(
       undefined,
-      SimpleObjectOptionalFunction<ObjectType<boolean>>({
+      SimpleObjectOptional<ObjectType<boolean>>({
         test: SimpleBoolean,
       })
     );
@@ -93,9 +94,9 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes optional null object - truthy', () => {
-    const result = unknownMatchesTemplate<ObjectType<boolean> | null>(
+    const result = simpleTypeGuard<ObjectType<boolean> | null>(
       null,
-      SimpleObjectOptionalFunction<ObjectType<boolean>>({
+      SimpleObjectOptional<ObjectType<boolean>>({
         test: SimpleBoolean,
       })
     );
@@ -103,9 +104,9 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes optional filled object - truthy', () => {
-    const result = unknownMatchesTemplate<ObjectType<boolean> | null>(
+    const result = simpleTypeGuard<ObjectType<boolean> | null>(
       { test: true },
-      SimpleObjectOptionalFunction<ObjectType<boolean>>({
+      SimpleObjectOptional<ObjectType<boolean>>({
         test: SimpleBoolean,
       })
     );
@@ -113,7 +114,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes optional property in object - truthy', () => {
-    const result = unknownMatchesTemplate<{ test?: string }>(
+    const result = simpleTypeGuard<{ test?: string }>(
       {},
       {
         test: SimpleStringOptional,
@@ -123,7 +124,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes Error object as invalid', () => {
-    const result = unknownMatchesTemplate<Error>(undefined, {
+    const result = simpleTypeGuard<Error>(undefined, {
       message: SimpleString,
       name: SimpleString,
       stack: SimpleStringOptional,
@@ -133,7 +134,7 @@ describe('objects type tests', () => {
   });
 
   test('type guard recognizes Error object as valid', () => {
-    const result = unknownMatchesTemplate<Error>(new Error('test'), {
+    const result = simpleTypeGuard<Error>(new Error('test'), {
       message: SimpleString,
       name: SimpleString,
       stack: SimpleStringOptional,
