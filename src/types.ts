@@ -78,9 +78,11 @@ export type TypeToTypeofObject<T> = {
   [Key in keyof T]: TypeToTypeof<T[Key]>;
 };
 
-type ExractObject<T> = {
-  [Key in keyof RemovePrimitivesAndArrays<T>]: RemovePrimitivesAndArrays<T>[Key];
-};
+type ExractObject<T> = T extends UnpackArray<T>[]
+  ? never
+  : {
+      [Key in keyof RemovePrimitivesAndArrays<T>]: RemovePrimitivesAndArrays<T>[Key];
+    };
 
 type RemovePrimitivesAndArrays<T> = Exclude<
   T,

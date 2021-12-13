@@ -342,3 +342,16 @@ expectType<{ key: { foo: string } } | null>(
     ? variable
     : null
 );
+
+/**
+ * Common Error Types
+ */
+expectError(
+  unknownMatchesTemplate<{ key: { foo: string[] } }>(variable, {
+    key: {
+      foo: [],
+    },
+  })
+    ? variable
+    : null
+);
