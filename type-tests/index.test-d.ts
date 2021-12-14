@@ -292,6 +292,18 @@ expectError(
     ? variable
     : null
 );
+
+// Deep nested array error
+expectError(
+  unknownMatchesTemplate<[{ key: { key: string[] | undefined }[] }]>(
+    variable,
+    SimpleArrayFunction({
+      key: SimpleArrayFunction({ key: SimpleArrayFunction(SimpleString) }),
+    })
+  )
+    ? variable
+    : null
+);
 // TODO: see if empty arrays can trigger errors
 // expectError(unknownMatchesTemplate<string[]>(variable, []) ? variable : null);
 
@@ -299,9 +311,7 @@ expectError(
 expectType<[[{ key: string }]] | null>(
   unknownMatchesTemplate<[[{ key: string }]]>(
     variable,
-    SimpleArrayFunction<[{ key: string }]>(
-      SimpleArrayFunction<{ key: string }>({ key: SimpleString })
-    )
+    SimpleArrayFunction(SimpleArrayFunction({ key: SimpleString }))
   )
     ? variable
     : null

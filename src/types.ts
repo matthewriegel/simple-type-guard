@@ -124,3 +124,13 @@ export type TypeofValue =
 export interface Options {
   throwErrorOnFailure?: boolean;
 }
+
+// const T: TypeToTypeof<[{ key: { key: string[] | undefined }[] }]> =
+//   SimpleArrayFunctionFunction({
+//     key: SimpleArrayFunctionFunction({ key: SimpleString }),
+//   });
+// function SimpleArrayFunctionFunction(arg0: {
+//   key: any;
+// }): TypeToTypeof<[{ key: { key: string[] | undefined }[] }]> {
+//   throw new Error('Function not implemented.');
+// }
