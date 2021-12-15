@@ -1,7 +1,7 @@
 import AbstractPrimitiveValidator from './AbstractPrimitiveValidator';
 
 class SimpleUndefined extends AbstractPrimitiveValidator<'undefined'> {
-  public static isPrimitive = true;
+  readonly label = 'undefined' as const;
 
   constructor() {
     super('undefined');

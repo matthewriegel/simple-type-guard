@@ -1,7 +1,7 @@
 import AbstractPrimitiveValidator from './AbstractPrimitiveValidator';
 
 class SimpleString extends AbstractPrimitiveValidator<'string'> {
-  type = 'string';
+  readonly label = 'string' as const;
 
   constructor() {
     super('string');

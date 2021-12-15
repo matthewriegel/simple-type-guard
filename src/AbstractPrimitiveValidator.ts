@@ -3,14 +3,11 @@ import { Options, TypeofValue } from './types';
 import { handleResult } from './unknownMatchesTemplate';
 
 abstract class AbstractPrimitiveValidator<
-  TypeOfGeneric extends TypeofValue
-> extends AbstractValidator<TypeOfGeneric> {
+  TypeOfGeneric extends TypeofValue,
+  Differentiator extends string = TypeOfGeneric
+> extends AbstractValidator<TypeOfGeneric, Differentiator> {
   constructor(typeofValue: TypeOfGeneric) {
     super(typeofValue);
-  }
-
-  get label(): string {
-    return this.parameter;
   }
 
   validate(unknownValue: unknown, options: Options, currentPath: string) {

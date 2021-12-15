@@ -1,7 +1,8 @@
 import AbstractPrimitiveValidator from './AbstractPrimitiveValidator';
-import AbstractValidator from './AbstractValidator';
 
 class SimpleNumber extends AbstractPrimitiveValidator<'number'> {
+  readonly label = 'number' as const;
+
   constructor() {
     super('number');
   }

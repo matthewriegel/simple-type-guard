@@ -1,4 +1,4 @@
-import SimpleArrayInnerClass, { SimpleArrayFunction } from './SimpleArray';
+import SimpleArrayInnerClass from './SimpleArray';
 import SimpleArrayOptionalInnerClass from './SimpleArrayOptional';
 import SimpleBigInt from './SimpleBigInt';
 import SimpleBigIntOptional from './SimpleBigIntOptional';
@@ -21,7 +21,7 @@ export type ValidatorTypes =
   | typeof SimpleSkip
   | SimpleFunctionInnerClass;
 
-type IsType<VariableType, ComparisonTime, IfTrueType> = Exclude<
+export type IsType<VariableType, ComparisonTime, IfTrueType> = Exclude<
   VariableType,
   ComparisonTime
 > extends never
@@ -39,7 +39,7 @@ type IsObjectType<VariableType> = ExcludeObject<VariableType> extends never
   ? TypeToTypeofObject<VariableType>
   : never;
 
-type IsOptionalObjectType<VariableType> = Extract<
+type IsObjectOptionalType<VariableType> = Extract<
   VariableType,
   undefined | null
 > extends never
@@ -50,7 +50,23 @@ type IsOptionalObjectType<VariableType> = Extract<
     >
   : never;
 
-type TypeToTypeof<VariableType> =
+type IsArrayType<VariableType> = IsType<
+  // T[]
+  VariableType,
+  unknown[],
+  SimpleArrayInnerClass<TypeofToTemplate<UnpackArray<VariableType>>>
+>;
+
+type IsArrayOptionalType<VariableType> = IsOptionalType<
+  // T[] | null | undefined
+  VariableType,
+  unknown[],
+  SimpleArrayOptionalInnerClass<
+    TypeofToTemplate<UnpackArray<Exclude<VariableType, null | undefined>>>
+  >
+>;
+
+export type InnerTypeToTypeof<VariableType> =
   | SimpleFunctionInnerClass
   | typeof SimpleSkip
   | IsType<VariableType, string, typeof SimpleString>
@@ -65,22 +81,10 @@ type TypeToTypeof<VariableType> =
   | IsOptionalType<VariableType, boolean, typeof SimpleBooleanOptional>
   | IsOptionalType<VariableType, bigint, typeof SimpleBigIntOptional>
   | IsOptionalType<VariableType, symbol, typeof SimpleSymbolOptional>
-  | IsType<
-      // T[]
-      VariableType,
-      unknown[],
-      SimpleArrayInnerClass<TypeofToTemplate<UnpackArray<VariableType>>>
-    >
-  | IsOptionalType<
-      // T[] | null | undefined
-      VariableType,
-      unknown[],
-      SimpleArrayOptionalInnerClass<
-        TypeofToTemplate<UnpackArray<Exclude<VariableType, null | undefined>>>
-      >
-    >
+  | IsArrayType<VariableType>
+  | IsArrayOptionalType<VariableType>
   | IsObjectType<VariableType>
-  | IsOptionalObjectType<VariableType>;
+  | IsObjectOptionalType<VariableType>;
 
 type ExcludeObject<ReturnType> =
   | Extract<ReturnType, unknown[]>
@@ -107,7 +111,9 @@ type Complete<T> = {
  * -      string     =>     SimpleString
  * - { key: string } => { key: SimpleString }
  */
-export type TypeofToTemplate<ReturnType> = TypeToTypeof<Complete<ReturnType>>;
+export type TypeofToTemplate<ReturnType> = InnerTypeToTypeof<
+  Complete<ReturnType>
+>;
 
 export type TypeofValue =
   | 'string'
@@ -121,27 +127,8 @@ export interface Options {
   throwErrorOnFailure?: boolean;
 }
 
-const TestingThing = SimpleArrayFunction<{
-  key: string[];
-}>({
-  key: SimpleArrayFunction(SimpleString),
-});
-
-const I = SimpleArrayFunction(SimpleString);
-
-type O = SimpleArrayInnerClass<TypeofToTemplate<string>>;
-type UU = TypeofToTemplate<string[]>;
-type L = SimpleArrayInnerClass<TypeofToTemplate<string>>;
-
-const v = SimpleArrayFunction(SimpleString);
-
-type Q = {} | undefined;
-
-type PPP = ExcludeObject<Q>;
-
-type K = UnpackArray<Q>;
-
-type KJ = IsOptionalObjectType<Q>;
-type JK = IsObjectType<Q>;
-
-type POP = Extract<{}, undefined | null>;
+type Uu = IsArrayType<{ key: string }[] | undefined>;
+type L = IsArrayType<[{ key: string }] | undefined>;
+type O = IsArrayType<[{ key: string }]>;
+type K = IsArrayType<{ key: string }[]>;
+type M = TypeofToTemplate<[{ key: string }] | undefined>;

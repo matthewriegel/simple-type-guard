@@ -1,7 +1,8 @@
 import AbstractPrimitiveValidator from './AbstractPrimitiveValidator';
-import AbstractValidator from './AbstractValidator';
 
 class SimpleBoolean extends AbstractPrimitiveValidator<'boolean'> {
+  readonly label = 'boolean' as const;
+
   constructor() {
     super('boolean');
   }

@@ -1,6 +1,8 @@
 import { Options } from './types';
 
-abstract class AbstractValidator<Type> {
+abstract class AbstractValidator<Type, Differentiator extends string> {
+  protected abstract readonly label: Differentiator;
+
   protected parameter: Type;
 
   constructor(_parameter: Type) {
@@ -12,8 +14,6 @@ abstract class AbstractValidator<Type> {
     options: Options,
     currentPath: string
   ): boolean;
-
-  abstract get label(): string;
 }
 
 export default AbstractValidator;

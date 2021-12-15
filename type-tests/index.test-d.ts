@@ -276,6 +276,7 @@ expectError(
     ? variable
     : null
 );
+
 expectError(
   unknownMatchesTemplate<[{ key: string }] | undefined>(
     variable,
@@ -285,7 +286,7 @@ expectError(
     : null
 );
 expectError(
-  unknownMatchesTemplate<[{ key: string }] | null>(
+  unknownMatchesTemplate<{ key: string }[] | null>(
     variable,
     SimpleArrayFunction({ key: SimpleString })
   )
