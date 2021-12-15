@@ -1,8 +1,6 @@
 import AbstractValidator from './AbstractValidator';
 
-class SimpleFunctionInnerClass extends AbstractValidator<
-  (item: unknown) => boolean
-> {
+class SimpleFunctionInnerClass extends AbstractValidator<any> {
   label = 'function result';
 
   validate(unknownVariable: unknown) {
@@ -12,7 +10,7 @@ class SimpleFunctionInnerClass extends AbstractValidator<
 
 export const SimpleFunctionFunction = (
   callback: (item: unknown) => boolean
-) => {
+): SimpleFunctionInnerClass => {
   return new SimpleFunctionInnerClass(callback);
 };
 

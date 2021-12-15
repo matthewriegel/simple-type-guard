@@ -365,3 +365,5 @@ expectError(
     ? variable
     : null
 );
+
+// TODO using an optional in place of a non-optional

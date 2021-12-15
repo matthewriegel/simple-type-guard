@@ -1,16 +1,13 @@
-import { TypeofToTemplate } from 'src';
 import AbstractValidator from './AbstractValidator';
 import { arrayAndContentsMatchTemplate } from './object';
-import { Options } from './types';
+import { Options, TypeofToTemplate } from './types';
 
-class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<
-  TypeofToTemplate<Type>
-> {
+class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<Type> {
   get label() {
     return 'array | undefined | null';
   }
 
-  constructor(template: TypeofToTemplate<Type>) {
+  constructor(template: Type) {
     super(template);
   }
 
@@ -30,7 +27,7 @@ class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<
 
 export const SimpleArrayOptionalFunction = <ReturnType>(
   params: TypeofToTemplate<ReturnType>
-) => {
+): SimpleArrayOptionalInnerClass<TypeofToTemplate<ReturnType>> => {
   return new SimpleArrayOptionalInnerClass(params);
 };
 

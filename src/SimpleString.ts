@@ -1,7 +1,8 @@
 import AbstractPrimitiveValidator from './AbstractPrimitiveValidator';
-import AbstractValidator from './AbstractValidator';
 
 class SimpleString extends AbstractPrimitiveValidator<'string'> {
+  type = 'string';
+
   constructor() {
     super('string');
   }
