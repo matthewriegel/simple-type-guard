@@ -1,4 +1,4 @@
-import simpleTypeGuard, { SimpleString } from 'src';
+import simpleTypeGuard, { SimpleString } from '.';
 
 export const getMessageFromUnknownErrorOrBlank = (
   unknownError: unknown
