@@ -4,6 +4,7 @@ import SimpleBigInt from './SimpleBigInt';
 import SimpleBigIntOptional from './SimpleBigIntOptional';
 import SimpleBoolean from './SimpleBoolean';
 import SimpleBooleanOptional from './SimpleBooleanOptional';
+import SimpleExactMatchInnerClass from './SimpleExactMatch';
 import SimpleFunctionInnerClass from './SimpleFunction';
 import SimpleNull from './SimpleNull';
 import SimpleNumber from './SimpleNumber';
@@ -90,7 +91,8 @@ export type TypeToTypeofStrict<VariableType> =
   | IsArrayType<VariableType>
   | IsArrayOptionalType<VariableType>
   | IsObjectType<VariableType>
-  | IsObjectOptionalType<VariableType>;
+  | IsObjectOptionalType<VariableType>
+  | SimpleExactMatchInnerClass<VariableType>;
 
 type ExcludeObject<ReturnType> =
   | Extract<ReturnType, unknown[]>

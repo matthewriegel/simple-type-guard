@@ -1,5 +1,9 @@
 import { expectError, expectType } from 'tsd';
-import unknownMatchesTemplate, { SimpleOr, SimpleSymbol } from '../src';
+import unknownMatchesTemplate, {
+  SimpleExactMatch,
+  SimpleOr,
+  SimpleSymbol,
+} from '../src';
 import { SimpleArrayFunction } from '../src/SimpleArray';
 import { SimpleArrayOptionalFunction } from '../src/SimpleArrayOptional';
 import SimpleBoolean from '../src/SimpleBoolean';
@@ -388,6 +392,17 @@ expectType<{ key: string | number } | null>(
 expectType<{ key: string | number | boolean } | null>(
   unknownMatchesTemplate<{ key: string | number | boolean }>(variable, {
     key: SimpleOr(SimpleString, SimpleBoolean, SimpleNumber),
+  })
+    ? variable
+    : null
+);
+
+/**
+ * SimpleExactMatch
+ */
+expectType<{ key: 'hello' | 'dolly' } | null>(
+  unknownMatchesTemplate<{ key: 'hello' | 'dolly' }>(variable, {
+    key: SimpleExactMatch('hello', 'dolly'),
   })
     ? variable
     : null

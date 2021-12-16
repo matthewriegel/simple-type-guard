@@ -4,6 +4,7 @@ export { default as SimpleBigInt } from './SimpleBigInt';
 export { default as SimpleBigIntOptional } from './SimpleBigIntOptional';
 export { default as SimpleBoolean } from './SimpleBoolean';
 export { default as SimpleBooleanOptional } from './SimpleBooleanOptional';
+export { SimpleExactMatchFunction as SimpleExactMatch } from './SimpleExactMatch';
 export { SimpleFunctionFunction as SimpleFunction } from './SimpleFunction';
 export { default as SimpleNull } from './SimpleNull';
 export { default as SimpleNumber } from './SimpleNumber';
