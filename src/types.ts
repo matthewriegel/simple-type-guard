@@ -66,7 +66,7 @@ type IsArrayOptionalType<VariableType> = IsOptionalType<
   >
 >;
 
-type ApplyStrictTypeof<VariableType> = VariableType extends any
+export type ApplyStrictTypeof<VariableType> = VariableType extends any
   ? TypeToTypeofStrict<VariableType>
   : never;
 

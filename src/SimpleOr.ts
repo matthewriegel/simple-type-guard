@@ -1,5 +1,6 @@
 import AbstractValidator from './AbstractValidator';
 import { getMessageFromUnknownErrorOrBlank } from './helpers';
+import { ApplyStrictTypeof } from './types';
 import { unknownMatchesTemplate } from './unknownMatchesTemplate';
 
 class SimpleOrInnerClass<Type> extends AbstractValidator<Type[], 'or'> {
@@ -27,9 +28,12 @@ class SimpleOrInnerClass<Type> extends AbstractValidator<Type[], 'or'> {
   }
 }
 
-export const SimpleOrFunction = <List extends [unknown, unknown, ...unknown[]]>(
-  ...list: List
-): SimpleOrInnerClass<List[number]> => {
+export const SimpleOrFunction = <
+  Variables,
+  ConvertedVariables extends unknown[] = ApplyStrictTypeof<Variables>[]
+>(
+  ...list: ConvertedVariables
+): SimpleOrInnerClass<ConvertedVariables[number]> => {
   return new SimpleOrInnerClass(
     list.filter(template => template !== undefined)
   );

@@ -1,5 +1,6 @@
 import { expectError, expectType } from 'tsd';
 import unknownMatchesTemplate, {
+  SimpleArray,
   SimpleExactMatch,
   SimpleOr,
   SimpleSymbol,
@@ -383,15 +384,44 @@ expectError(
 // Two type
 expectType<{ key: string | number } | null>(
   unknownMatchesTemplate<{ key: string | number }>(variable, {
-    key: SimpleOr(SimpleString, SimpleNumber),
+    key: SimpleOr<string | number>(SimpleString, SimpleNumber),
   })
     ? variable
     : null
 );
 
+// Three type
 expectType<{ key: string | number | boolean } | null>(
   unknownMatchesTemplate<{ key: string | number | boolean }>(variable, {
     key: SimpleOr(SimpleString, SimpleBoolean, SimpleNumber),
+  })
+    ? variable
+    : null
+);
+
+// Deep Comparison
+expectType<{
+  key:
+    | {
+        person: number[];
+      }
+    | { car: boolean };
+} | null>(
+  unknownMatchesTemplate<{
+    key:
+      | {
+          person: number[];
+        }
+      | { car: boolean };
+  }>(variable, {
+    key: SimpleOr(
+      {
+        person: SimpleArray(SimpleNumber),
+      },
+      {
+        car: SimpleBoolean,
+      }
+    ),
   })
     ? variable
     : null
