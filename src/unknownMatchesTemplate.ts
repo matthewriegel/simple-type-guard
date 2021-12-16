@@ -1,15 +1,13 @@
 import { TypeofToTemplate } from 'src';
 import { objectAndContentsMatchTemplate } from './object';
-import { Options } from './types';
 
 export const handleResult = (
   result: boolean,
   unknownVariable: unknown,
   expectedType: string,
-  options: Options,
   currentPath: string
 ): boolean => {
-  if (result || !options.throwErrorOnFailure) {
+  if (result) {
     return result;
   }
 
@@ -32,23 +30,21 @@ Variable Output: ${printedVariable}`
 export const unknownMatchesTemplate = <ReturnType>(
   unknownVariable: unknown,
   template: TypeofToTemplate<ReturnType>,
-  options: Options,
   currentPath: string
 ): unknownVariable is ReturnType => {
   if (typeof template === 'function') {
     const resultClass = new template(undefined);
-    return resultClass.validate(unknownVariable, options, currentPath);
+    return resultClass.validate(unknownVariable, currentPath);
   } else if (
     typeof template === 'object' &&
     'validate' in template &&
     typeof template.validate === 'function'
   ) {
-    return template.validate(unknownVariable, options, currentPath);
+    return template.validate(unknownVariable, currentPath);
   } else {
     return objectAndContentsMatchTemplate(
       unknownVariable,
       template,
-      options,
       currentPath
     );
   }

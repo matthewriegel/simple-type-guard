@@ -9,6 +9,7 @@ export { default as SimpleNull } from './SimpleNull';
 export { default as SimpleNumber } from './SimpleNumber';
 export { default as SimpleNumberOptional } from './SimpleNumberOptional';
 export { SimpleObjectOptionalFunction as SimpleObjectOptional } from './SimpleObjectOptional';
+export { SimpleOrFunction as SimpleOr } from './SimpleOr';
 export { default as SimpleSkip } from './SimpleSkip';
 export { default as SimpleString } from './SimpleString';
 export { default as SimpleStringOptional } from './SimpleStringOptional';
@@ -16,7 +17,7 @@ export { default as SimpleSymbol } from './SimpleSymbol';
 export { default as SimpleSymbolOptional } from './SimpleSymbolOptional';
 export { default as SimpleUndefined } from './SimpleUndefined';
 export type { TypeofToTemplate } from './types';
-import SimpleString from './SimpleString';
+import { getMessageFromUnknownErrorOrBlank } from './helpers';
 import { Options, TypeofToTemplate } from './types';
 import { unknownMatchesTemplate } from './unknownMatchesTemplate';
 
@@ -26,24 +27,24 @@ const simpleTypeGuard = <ReturnType>(
   options: Options = {}
 ): unknownVariable is ReturnType => {
   try {
-    const result = unknownMatchesTemplate(
-      unknownVariable,
-      template,
-      options,
-      '_root_'
-    );
+    const result = unknownMatchesTemplate(unknownVariable, template, '_root_');
     return result;
   } catch (error) {
-    // attempt to reset the error stack
-    if (
-      simpleTypeGuard<Pick<Error, 'message'>>(error, { message: SimpleString })
-    ) {
-      throw new Error(error.message);
+    if (!options.throwErrorOnFailure) {
+      return false;
     }
 
-    // If there is no message, just rethrow
-    throw error;
+    // attempt to reset the error stack
+    const errorMessage = getMessageFromUnknownErrorOrBlank(error);
+    if (errorMessage) {
+      throw new Error(errorMessage);
+    } else {
+      // If there is no message, just rethrow
+      throw error;
+    }
   }
 };
+
+type I = TypeofToTemplate<string | undefined>;
 
 export default simpleTypeGuard;

@@ -1,5 +1,5 @@
 import AbstractPrimitiveValidator from './AbstractPrimitiveValidator';
-import { Options, TypeofValue } from './types';
+import { TypeofValue } from './types';
 
 abstract class AbstractOptionalPrimitiveValidator<
   TypeOfGeneric extends TypeofValue
@@ -7,12 +7,12 @@ abstract class AbstractOptionalPrimitiveValidator<
   TypeOfGeneric,
   `${TypeOfGeneric}-optional`
 > {
-  validate(unknownValue: unknown, options: Options, currentPath: string) {
+  validate(unknownValue: unknown, currentPath: string) {
     if (unknownValue === undefined || unknownValue === null) {
       return true;
     }
 
-    return super.validate(unknownValue, options, currentPath);
+    return super.validate(unknownValue, currentPath);
   }
 }
 

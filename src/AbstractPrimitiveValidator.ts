@@ -1,5 +1,5 @@
 import AbstractValidator from './AbstractValidator';
-import { Options, TypeofValue } from './types';
+import { TypeofValue } from './types';
 import { handleResult } from './unknownMatchesTemplate';
 
 abstract class AbstractPrimitiveValidator<
@@ -10,12 +10,11 @@ abstract class AbstractPrimitiveValidator<
     super(typeofValue);
   }
 
-  validate(unknownValue: unknown, options: Options, currentPath: string) {
+  validate(unknownValue: unknown, currentPath: string) {
     return handleResult(
       typeof unknownValue === this.parameter,
       unknownValue,
       this.label,
-      options,
       currentPath
     );
   }

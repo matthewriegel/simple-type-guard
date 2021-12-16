@@ -1,5 +1,5 @@
 import AbstractValidator from './AbstractValidator';
-import { Options, TypeofToTemplate } from './types';
+import { TypeofToTemplate } from './types';
 import { handleResult, unknownMatchesTemplate } from './unknownMatchesTemplate';
 
 class SimpleObjectOptionalInnerClass<Type> extends AbstractValidator<
@@ -12,7 +12,7 @@ class SimpleObjectOptionalInnerClass<Type> extends AbstractValidator<
     super(template);
   }
 
-  validate(unknownValue: unknown, options: Options, currentPath: string) {
+  validate(unknownValue: unknown, currentPath: string) {
     if (unknownValue === undefined || unknownValue === null) {
       return true;
     }
@@ -25,12 +25,11 @@ class SimpleObjectOptionalInnerClass<Type> extends AbstractValidator<
         unknownMatchesTemplate<Type>(
           (unknownValue as Record<string, unknown>)[key],
           value,
-          options,
           currentPath
         )
       );
 
-    return handleResult(result, unknownValue, this.label, options, currentPath);
+    return handleResult(result, unknownValue, this.label, currentPath);
   }
 }
 

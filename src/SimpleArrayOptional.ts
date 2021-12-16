@@ -1,6 +1,6 @@
 import AbstractValidator from './AbstractValidator';
 import { arrayAndContentsMatchTemplate } from './object';
-import { Options, TypeofToTemplate } from './types';
+import { TypeofToTemplate } from './types';
 
 class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<
   Type,
@@ -12,7 +12,7 @@ class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<
     super(template);
   }
 
-  validate(unknownValue: unknown, options: Options, currentPath: string) {
+  validate(unknownValue: unknown, currentPath: string) {
     if (unknownValue === undefined || unknownValue === null) {
       return true;
     }
@@ -20,7 +20,6 @@ class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<
     return arrayAndContentsMatchTemplate(
       unknownValue,
       this.parameter,
-      options,
       currentPath
     );
   }

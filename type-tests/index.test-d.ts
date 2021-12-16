@@ -1,5 +1,5 @@
 import { expectError, expectType } from 'tsd';
-import unknownMatchesTemplate from '../src';
+import unknownMatchesTemplate, { SimpleOr, SimpleSymbol } from '../src';
 import { SimpleArrayFunction } from '../src/SimpleArray';
 import { SimpleArrayOptionalFunction } from '../src/SimpleArrayOptional';
 import SimpleBoolean from '../src/SimpleBoolean';
@@ -349,6 +349,45 @@ expectError(
 expectType<{ key: { foo: string } } | null>(
   unknownMatchesTemplate<{ key: { foo: string } }>(variable, {
     key: SimpleSkip,
+  })
+    ? variable
+    : null
+);
+
+/**
+ * SimpleOr
+ */
+// FAILURE
+expectError(
+  unknownMatchesTemplate<{ key: string | number }>(variable, {
+    key: SimpleOr(SimpleString, SimpleNumber, SimpleSymbol),
+  })
+    ? variable
+    : null
+);
+
+// Duplicate parameters
+// expectError(
+//   unknownMatchesTemplate<{ key: string | number }>(variable, {
+//     key: SimpleOr(SimpleString, SimpleNumber, SimpleNumber),
+//   })
+//     ? variable
+//     : null
+// );
+
+// SUCCESS
+// Two type
+expectType<{ key: string | number } | null>(
+  unknownMatchesTemplate<{ key: string | number }>(variable, {
+    key: SimpleOr(SimpleString, SimpleNumber),
+  })
+    ? variable
+    : null
+);
+
+expectType<{ key: string | number | boolean } | null>(
+  unknownMatchesTemplate<{ key: string | number | boolean }>(variable, {
+    key: SimpleOr(SimpleString, SimpleBoolean, SimpleNumber),
   })
     ? variable
     : null

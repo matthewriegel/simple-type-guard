@@ -9,6 +9,7 @@ import SimpleNull from './SimpleNull';
 import SimpleNumber from './SimpleNumber';
 import SimpleNumberOptional from './SimpleNumberOptional';
 import SimpleObjectOptionalInnerClass from './SimpleObjectOptional';
+import SimpleOrInnerClass from './SimpleOr';
 import SimpleSkip from './SimpleSkip';
 import SimpleString from './SimpleString';
 import SimpleStringOptional from './SimpleStringOptional';
@@ -51,14 +52,12 @@ type IsObjectOptionalType<VariableType> = Extract<
   : never;
 
 type IsArrayType<VariableType> = IsType<
-  // T[]
   VariableType,
   unknown[],
   SimpleArrayInnerClass<TypeofToTemplate<UnpackArray<VariableType>>>
 >;
 
 type IsArrayOptionalType<VariableType> = IsOptionalType<
-  // T[] | null | undefined
   VariableType,
   unknown[],
   SimpleArrayOptionalInnerClass<
@@ -66,9 +65,16 @@ type IsArrayOptionalType<VariableType> = IsOptionalType<
   >
 >;
 
-export type InnerTypeToTypeof<VariableType> =
+type ApplyStrictTypeof<VariableType> = VariableType extends any
+  ? TypeToTypeofStrict<VariableType>
+  : never;
+
+type TypeToTypeofUniversal<VariableType> =
+  | SimpleOrInnerClass<ApplyStrictTypeof<VariableType>>
   | SimpleFunctionInnerClass
-  | typeof SimpleSkip
+  | typeof SimpleSkip;
+
+export type TypeToTypeofStrict<VariableType> =
   | IsType<VariableType, string, typeof SimpleString>
   | IsType<VariableType, number, typeof SimpleNumber>
   | IsType<VariableType, boolean, typeof SimpleBoolean>
@@ -111,9 +117,9 @@ type Complete<T> = {
  * -      string     =>     SimpleString
  * - { key: string } => { key: SimpleString }
  */
-export type TypeofToTemplate<ReturnType> = InnerTypeToTypeof<
-  Complete<ReturnType>
->;
+export type TypeofToTemplate<ReturnType> =
+  | TypeToTypeofStrict<Complete<ReturnType>>
+  | TypeToTypeofUniversal<Complete<ReturnType>>;
 
 export type TypeofValue =
   | 'string'
@@ -126,9 +132,3 @@ export type TypeofValue =
 export interface Options {
   throwErrorOnFailure?: boolean;
 }
-
-type Uu = IsArrayType<{ key: string }[] | undefined>;
-type L = IsArrayType<[{ key: string }] | undefined>;
-type O = IsArrayType<[{ key: string }]>;
-type K = IsArrayType<{ key: string }[]>;
-type M = TypeofToTemplate<[{ key: string }] | undefined>;
