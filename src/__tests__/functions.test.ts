@@ -5,7 +5,7 @@ describe('function type tests', () => {
     const result = simpleTypeGuard<{ hello: string }>(
       { hello: 'thing' },
       {
-        hello: SimpleFunction(item => typeof item === 'string'),
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(true);
@@ -15,7 +15,7 @@ describe('function type tests', () => {
     const result = simpleTypeGuard<{ hello: string | number }>(
       { hello: 'thing' },
       {
-        hello: SimpleFunction(item => typeof item === 'string'),
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(true);
@@ -25,7 +25,7 @@ describe('function type tests', () => {
     const result = simpleTypeGuard<{ hello: { test: 'string' } }>(
       { hello: {} },
       {
-        hello: SimpleFunction(item => typeof item === 'object'),
+        hello: new SimpleFunction(item => typeof item === 'object'),
       }
     );
     expect(result).toBe(true);
@@ -35,7 +35,7 @@ describe('function type tests', () => {
     const result = simpleTypeGuard<{ hello: string }>(
       { hello: 4 },
       {
-        hello: SimpleFunction(item => typeof item === 'string'),
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(false);
@@ -45,7 +45,7 @@ describe('function type tests', () => {
     const result = simpleTypeGuard<{ hello: string | number }>(
       { hello: {} },
       {
-        hello: SimpleFunction(item => typeof item === 'string'),
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(false);
@@ -55,7 +55,7 @@ describe('function type tests', () => {
     const result = simpleTypeGuard<{ hello: { test: 'string' } }>(
       { hello: 'test' },
       {
-        hello: SimpleFunction(item => typeof item === 'object'),
+        hello: new SimpleFunction(item => typeof item === 'object'),
       }
     );
     expect(result).toBe(false);

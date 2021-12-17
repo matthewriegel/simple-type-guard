@@ -1,14 +1,14 @@
 import AbstractValidator from './AbstractValidator';
-import { TypeofToTemplate } from './types';
+import { TypeofToTemplateExcludeOptionals } from './types';
 import { handleResult, unknownMatchesTemplate } from './unknownMatchesTemplate';
 
-class SimpleObjectOptionalInnerClass<Type> extends AbstractValidator<
+class SimpleObjectOptional<
   Type,
-  'object-optional'
-> {
+  ConvertedType = TypeofToTemplateExcludeOptionals<Type>
+> extends AbstractValidator<ConvertedType, 'object-optional'> {
   readonly label = 'object-optional' as const;
 
-  constructor(template: Type) {
+  constructor(template: ConvertedType) {
     super(template);
   }
 
@@ -33,13 +33,4 @@ class SimpleObjectOptionalInnerClass<Type> extends AbstractValidator<
   }
 }
 
-export const SimpleObjectOptionalFunction = <
-  InputType,
-  ReturnType = TypeofToTemplate<InputType>
->(
-  params: ReturnType
-): SimpleObjectOptionalInnerClass<ReturnType> => {
-  return new SimpleObjectOptionalInnerClass(params);
-};
-
-export default SimpleObjectOptionalInnerClass;
+export default SimpleObjectOptional;

@@ -1,13 +1,10 @@
 import AbstractValidator from './AbstractValidator';
 import { handleResult } from './unknownMatchesTemplate';
 
-class SimpleExactMatchInnerClass<Type> extends AbstractValidator<
-  Type[],
-  'exact-match'
-> {
+class SimpleExactMatch<Type> extends AbstractValidator<Type[], 'exact-match'> {
   readonly label = 'exact-match' as const;
 
-  constructor(template: Type[]) {
+  constructor(...template: Type[]) {
     super(template);
   }
 
@@ -21,10 +18,4 @@ class SimpleExactMatchInnerClass<Type> extends AbstractValidator<
   }
 }
 
-export const SimpleExactMatchFunction = <InputType>(
-  ...values: InputType[]
-): SimpleExactMatchInnerClass<InputType> => {
-  return new SimpleExactMatchInnerClass(values);
-};
-
-export default SimpleExactMatchInnerClass;
+export default SimpleExactMatch;

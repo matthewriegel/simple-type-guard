@@ -1,21 +1,20 @@
 import { expectError, expectType } from 'tsd';
 import unknownMatchesTemplate, {
   SimpleArray,
+  SimpleArrayOptional,
+  SimpleBoolean,
+  SimpleBooleanOptional,
   SimpleExactMatch,
+  SimpleNumber,
+  SimpleNumberOptional,
+  SimpleObjectOptional,
   SimpleOr,
+  SimpleSkip,
+  SimpleString,
+  SimpleStringOptional,
   SimpleSymbol,
+  SimpleUndefined,
 } from '../src';
-import { SimpleArrayFunction } from '../src/SimpleArray';
-import { SimpleArrayOptionalFunction } from '../src/SimpleArrayOptional';
-import SimpleBoolean from '../src/SimpleBoolean';
-import SimpleBooleanOptional from '../src/SimpleBooleanOptional';
-import SimpleNumber from '../src/SimpleNumber';
-import SimpleNumberOptional from '../src/SimpleNumberOptional';
-import { SimpleObjectOptionalFunction } from '../src/SimpleObjectOptional';
-import SimpleSkip from '../src/SimpleSkip';
-import SimpleString from '../src/SimpleString';
-import SimpleStringOptional from '../src/SimpleStringOptional';
-import SimpleUndefined from '../src/SimpleUndefined';
 
 const variable: unknown = '';
 
@@ -231,7 +230,7 @@ expectType<
     | undefined
   >(
     variable,
-    SimpleObjectOptionalFunction<{
+    new SimpleObjectOptional<{
       hello: {
         world: number;
       };
@@ -261,22 +260,19 @@ expectType<{
  */
 // Error
 expectError(
-  unknownMatchesTemplate<string[]>(variable, SimpleArrayFunction(SimpleNumber))
+  unknownMatchesTemplate<string[]>(variable, new SimpleArray(SimpleNumber))
     ? variable
     : null
 );
 expectError(
-  unknownMatchesTemplate<[string[]]>(
-    variable,
-    SimpleArrayFunction(SimpleString)
-  )
+  unknownMatchesTemplate<[string[]]>(variable, new SimpleArray(SimpleString))
     ? variable
     : null
 );
 expectError(
   unknownMatchesTemplate<{ key: string }[]>(
     variable,
-    SimpleArrayFunction({ key: SimpleNumber })
+    new SimpleArray({ key: SimpleNumber })
   )
     ? variable
     : null
@@ -285,7 +281,7 @@ expectError(
 expectError(
   unknownMatchesTemplate<[{ key: string }] | undefined>(
     variable,
-    SimpleArrayFunction({ key: SimpleString })
+    new SimpleArray({ key: SimpleString })
   )
     ? variable
     : null
@@ -293,7 +289,7 @@ expectError(
 expectError(
   unknownMatchesTemplate<{ key: string }[] | null>(
     variable,
-    SimpleArrayFunction({ key: SimpleString })
+    new SimpleArray({ key: SimpleString })
   )
     ? variable
     : null
@@ -303,8 +299,10 @@ expectError(
 expectError(
   unknownMatchesTemplate<[{ key: { key: string[] | undefined }[] }]>(
     variable,
-    SimpleArrayFunction({
-      key: SimpleArrayFunction({ key: SimpleArrayFunction(SimpleString) }),
+    new SimpleArray({
+      key: new SimpleArray({
+        key: new SimpleArray(SimpleString),
+      }),
     })
   )
     ? variable
@@ -317,7 +315,7 @@ expectError(
 expectType<[[{ key: string }]] | null>(
   unknownMatchesTemplate<[[{ key: string }]]>(
     variable,
-    SimpleArrayFunction(SimpleArrayFunction({ key: SimpleString }))
+    new SimpleArray(new SimpleArray({ key: SimpleString }))
   )
     ? variable
     : null
@@ -326,7 +324,7 @@ expectType<[[{ key: string }]] | null>(
 expectType<[{ key: string }] | null | undefined>(
   unknownMatchesTemplate<[{ key: string }] | undefined>(
     variable,
-    SimpleArrayOptionalFunction<{ key: string }>({ key: SimpleString })
+    new SimpleArrayOptional<{ key: string }>({ key: SimpleString })
   )
     ? variable
     : null
@@ -335,7 +333,7 @@ expectType<[{ key: string }] | null | undefined>(
 expectType<[{ key: string }] | null>(
   unknownMatchesTemplate<[{ key: string }] | null>(
     variable,
-    SimpleArrayOptionalFunction<{ key: string }>({ key: SimpleString })
+    new SimpleArrayOptional<{ key: string }>({ key: SimpleString })
   )
     ? variable
     : null
@@ -384,7 +382,7 @@ expectError(
 // Two type
 expectType<{ key: string | number } | null>(
   unknownMatchesTemplate<{ key: string | number }>(variable, {
-    key: SimpleOr<string | number>(SimpleString, SimpleNumber),
+    key: new SimpleOr<string | number>(SimpleString, SimpleNumber),
   })
     ? variable
     : null
@@ -393,7 +391,7 @@ expectType<{ key: string | number } | null>(
 // Three type
 expectType<{ key: string | number | boolean } | null>(
   unknownMatchesTemplate<{ key: string | number | boolean }>(variable, {
-    key: SimpleOr(SimpleString, SimpleBoolean, SimpleNumber),
+    key: new SimpleOr(SimpleString, SimpleBoolean, SimpleNumber),
   })
     ? variable
     : null
@@ -414,9 +412,9 @@ expectType<{
         }
       | { car: boolean };
   }>(variable, {
-    key: SimpleOr(
+    key: new SimpleOr(
       {
-        person: SimpleArray(SimpleNumber),
+        person: new SimpleArray(SimpleNumber),
       },
       {
         car: SimpleBoolean,
@@ -432,7 +430,7 @@ expectType<{
  */
 expectType<{ key: 'hello' | 'dolly' } | null>(
   unknownMatchesTemplate<{ key: 'hello' | 'dolly' }>(variable, {
-    key: SimpleExactMatch('hello', 'dolly'),
+    key: new SimpleExactMatch('hello', 'dolly'),
   })
     ? variable
     : null

@@ -86,7 +86,7 @@ describe('objects type tests', () => {
   test('type guard recognizes optional object - truthy', () => {
     const result = simpleTypeGuard<ObjectType<boolean> | undefined>(
       undefined,
-      SimpleObjectOptional<ObjectType<boolean>>({
+      new SimpleObjectOptional<ObjectType<boolean>>({
         test: SimpleBoolean,
       })
     );
@@ -96,7 +96,7 @@ describe('objects type tests', () => {
   test('type guard recognizes optional null object - truthy', () => {
     const result = simpleTypeGuard<ObjectType<boolean> | null>(
       null,
-      SimpleObjectOptional<ObjectType<boolean>>({
+      new SimpleObjectOptional<ObjectType<boolean>>({
         test: SimpleBoolean,
       })
     );
@@ -106,7 +106,7 @@ describe('objects type tests', () => {
   test('type guard recognizes optional filled object - truthy', () => {
     const result = simpleTypeGuard<ObjectType<boolean> | null>(
       { test: true },
-      SimpleObjectOptional<ObjectType<boolean>>({
+      new SimpleObjectOptional<ObjectType<boolean>>({
         test: SimpleBoolean,
       })
     );

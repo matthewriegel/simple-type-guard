@@ -1,16 +1,16 @@
-import SimpleArrayInnerClass from './SimpleArray';
-import SimpleArrayOptionalInnerClass from './SimpleArrayOptional';
+import SimpleArray from './SimpleArray';
+import SimpleArrayOptional from './SimpleArrayOptional';
 import SimpleBigInt from './SimpleBigInt';
 import SimpleBigIntOptional from './SimpleBigIntOptional';
 import SimpleBoolean from './SimpleBoolean';
 import SimpleBooleanOptional from './SimpleBooleanOptional';
-import SimpleExactMatchInnerClass from './SimpleExactMatch';
-import SimpleFunctionInnerClass from './SimpleFunction';
+import SimpleExactMatch from './SimpleExactMatch';
+import SimpleFunction from './SimpleFunction';
 import SimpleNull from './SimpleNull';
 import SimpleNumber from './SimpleNumber';
 import SimpleNumberOptional from './SimpleNumberOptional';
-import SimpleObjectOptionalInnerClass from './SimpleObjectOptional';
-import SimpleOrInnerClass from './SimpleOr';
+import SimpleObjectOptional from './SimpleObjectOptional';
+import SimpleOr from './SimpleOr';
 import SimpleSkip from './SimpleSkip';
 import SimpleString from './SimpleString';
 import SimpleStringOptional from './SimpleStringOptional';
@@ -21,7 +21,7 @@ import SimpleUndefined from './SimpleUndefined';
 export type ValidatorTypes =
   | typeof SimpleString
   | typeof SimpleSkip
-  | SimpleFunctionInnerClass;
+  | SimpleFunction;
 
 export type IsType<VariableType, ComparisonTime, IfTrueType> = Exclude<
   VariableType,
@@ -47,23 +47,19 @@ type IsObjectOptionalType<VariableType> = Extract<
 > extends never
   ? never
   : ExcludeObject<Exclude<VariableType, undefined | null>> extends never
-  ? SimpleObjectOptionalInnerClass<
-      TypeofToTemplate<Exclude<VariableType, null | undefined>>
-    >
+  ? SimpleObjectOptional<VariableType>
   : never;
 
 type IsArrayType<VariableType> = IsType<
   VariableType,
   unknown[],
-  SimpleArrayInnerClass<TypeofToTemplate<UnpackArray<VariableType>>>
+  SimpleArray<UnpackArray<VariableType>>
 >;
 
 type IsArrayOptionalType<VariableType> = IsOptionalType<
   VariableType,
   unknown[],
-  SimpleArrayOptionalInnerClass<
-    TypeofToTemplate<UnpackArray<Exclude<VariableType, null | undefined>>>
-  >
+  SimpleArrayOptional<UnpackArray<Exclude<VariableType, null | undefined>>>
 >;
 
 export type ApplyStrictTypeof<VariableType> = VariableType extends any
@@ -71,8 +67,8 @@ export type ApplyStrictTypeof<VariableType> = VariableType extends any
   : never;
 
 type TypeToTypeofUniversal<VariableType> =
-  | SimpleOrInnerClass<ApplyStrictTypeof<VariableType>>
-  | SimpleFunctionInnerClass
+  | SimpleOr<VariableType>
+  | SimpleFunction
   | typeof SimpleSkip;
 
 export type TypeToTypeofStrict<VariableType> =
@@ -92,7 +88,7 @@ export type TypeToTypeofStrict<VariableType> =
   | IsArrayOptionalType<VariableType>
   | IsObjectType<VariableType>
   | IsObjectOptionalType<VariableType>
-  | SimpleExactMatchInnerClass<VariableType>;
+  | SimpleExactMatch<VariableType>;
 
 type ExcludeObject<ReturnType> =
   | Extract<ReturnType, unknown[]>
@@ -122,6 +118,10 @@ type Complete<T> = {
 export type TypeofToTemplate<ReturnType> =
   | TypeToTypeofStrict<Complete<ReturnType>>
   | TypeToTypeofUniversal<Complete<ReturnType>>;
+
+export type TypeofToTemplateExcludeOptionals<Type> = TypeofToTemplate<
+  Exclude<Type, null | undefined>
+>;
 
 export type TypeofValue =
   | 'string'

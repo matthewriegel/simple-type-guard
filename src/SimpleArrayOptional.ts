@@ -1,15 +1,15 @@
 import AbstractValidator from './AbstractValidator';
 import { arrayAndContentsMatchTemplate } from './object';
-import { TypeofToTemplate } from './types';
+import { TypeofToTemplateExcludeOptionals } from './types';
 
-class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<
+class SimpleArrayOptional<
   Type,
-  'array-optional'
-> {
+  ConvertedType = TypeofToTemplateExcludeOptionals<Type>
+> extends AbstractValidator<ConvertedType, 'array-optional'> {
   readonly label = 'array-optional' as const;
 
-  constructor(template: Type) {
-    super(template);
+  constructor(parameter: ConvertedType) {
+    super(parameter);
   }
 
   validate(unknownValue: unknown, currentPath: string) {
@@ -25,13 +25,4 @@ class SimpleArrayOptionalInnerClass<Type> extends AbstractValidator<
   }
 }
 
-export const SimpleArrayOptionalFunction = <
-  InputType,
-  ReturnType = TypeofToTemplate<InputType>
->(
-  params: ReturnType
-): SimpleArrayOptionalInnerClass<ReturnType> => {
-  return new SimpleArrayOptionalInnerClass(params);
-};
-
-export default SimpleArrayOptionalInnerClass;
+export default SimpleArrayOptional;

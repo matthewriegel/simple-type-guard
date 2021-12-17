@@ -1,7 +1,7 @@
 import AbstractValidator from './AbstractValidator';
 
-class SimpleFunctionInnerClass extends AbstractValidator<
-  (unknownValue: unknown, currentPath?: string) => boolean,
+class SimpleFunction extends AbstractValidator<
+  (unknownValue: unknown, currentPath: string) => boolean,
   'function-result'
 > {
   label = 'function-result' as const;
@@ -11,10 +11,4 @@ class SimpleFunctionInnerClass extends AbstractValidator<
   }
 }
 
-export const SimpleFunctionFunction = (
-  callback: (unknownValue: unknown, currentPath?: string) => boolean
-): SimpleFunctionInnerClass => {
-  return new SimpleFunctionInnerClass(callback);
-};
-
-export default SimpleFunctionInnerClass;
+export default SimpleFunction;
