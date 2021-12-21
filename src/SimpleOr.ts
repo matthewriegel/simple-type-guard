@@ -15,15 +15,16 @@ class SimpleOr<
 
   validate(unknownValue: unknown, currentPath: string) {
     const errors: unknown[] = [];
-    const result = this.parameter.some(template => {
+    const result = this.parameter.some((template): boolean => {
       try {
-        unknownMatchesTemplate<Type>(
+        return unknownMatchesTemplate<Type>(
           unknownValue,
           template as TypeofToTemplate<Type>,
           currentPath
         );
       } catch (error) {
         errors.push(error);
+        return false;
       }
     });
 
