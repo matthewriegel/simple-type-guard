@@ -1,63 +1,73 @@
-import unknownMatchesTemplate from '..';
+import simpleTypeGuard, { SimpleFunction, SimpleSkip } from '..';
 
 describe('function type tests', () => {
   test('function type guard recognizes string - truthy', () => {
-    const result = unknownMatchesTemplate<{ hello: string }>(
+    const result = simpleTypeGuard<{ hello: string }>(
       { hello: 'thing' },
       {
-        hello: item => typeof item === 'string',
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(true);
   });
 
   test('function type guard recognizes union type - truthy', () => {
-    const result = unknownMatchesTemplate<{ hello: string | number }>(
+    const result = simpleTypeGuard<{ hello: string | number }>(
       { hello: 'thing' },
       {
-        hello: item => typeof item === 'string',
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(true);
   });
 
   test('function type guard recognizes object type - truthy', () => {
-    const result = unknownMatchesTemplate<{ hello: { test: 'string' } }>(
+    const result = simpleTypeGuard<{ hello: { test: 'string' } }>(
       { hello: {} },
       {
-        hello: item => typeof item === 'object',
+        hello: new SimpleFunction(item => typeof item === 'object'),
       }
     );
     expect(result).toBe(true);
   });
 
   test('function type guard recognizes string - truthy', () => {
-    const result = unknownMatchesTemplate<{ hello: string }>(
+    const result = simpleTypeGuard<{ hello: string }>(
       { hello: 4 },
       {
-        hello: item => typeof item === 'string',
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(false);
   });
 
   test('function type guard recognizes union type - truthy', () => {
-    const result = unknownMatchesTemplate<{ hello: string | number }>(
+    const result = simpleTypeGuard<{ hello: string | number }>(
       { hello: {} },
       {
-        hello: item => typeof item === 'string',
+        hello: new SimpleFunction(item => typeof item === 'string'),
       }
     );
     expect(result).toBe(false);
   });
 
   test('function type guard recognizes object type - truthy', () => {
-    const result = unknownMatchesTemplate<{ hello: { test: 'string' } }>(
+    const result = simpleTypeGuard<{ hello: { test: 'string' } }>(
       { hello: 'test' },
       {
-        hello: item => typeof item === 'object',
+        hello: new SimpleFunction(item => typeof item === 'object'),
       }
     );
     expect(result).toBe(false);
+  });
+
+  test('SimpleSkip ignores invalid type', () => {
+    const result = simpleTypeGuard<{ hello: { test: 'string' } }>(
+      { hello: 4 },
+      {
+        hello: SimpleSkip,
+      }
+    );
+    expect(result).toBe(true);
   });
 });

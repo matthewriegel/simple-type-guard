@@ -1,5 +1,20 @@
 import { expectError, expectType } from 'tsd';
-import unknownMatchesTemplate from '../src';
+import unknownMatchesTemplate, {
+  SimpleArray,
+  SimpleArrayOptional,
+  SimpleBoolean,
+  SimpleBooleanOptional,
+  SimpleExactMatch,
+  SimpleNumber,
+  SimpleNumberOptional,
+  SimpleObjectOptional,
+  SimpleOr,
+  SimpleSkip,
+  SimpleString,
+  SimpleStringOptional,
+  SimpleSymbol,
+  SimpleUndefined,
+} from '../src';
 
 const variable: unknown = '';
 
@@ -7,69 +22,77 @@ const variable: unknown = '';
  * Primitive Types
  */
 // Error
-expectError(unknownMatchesTemplate<number>(variable, 'string'));
-expectError(unknownMatchesTemplate<number>(variable, 'boolean'));
-expectError(unknownMatchesTemplate<number>(variable, 'undefined'));
-expectError(unknownMatchesTemplate<string>(variable, 'number'));
-expectError(unknownMatchesTemplate<string>(variable, 'boolean'));
-expectError(unknownMatchesTemplate<string>(variable, 'undefined'));
-expectError(unknownMatchesTemplate<boolean>(variable, 'string'));
-expectError(unknownMatchesTemplate<boolean>(variable, 'number'));
-expectError(unknownMatchesTemplate<boolean>(variable, 'undefined'));
-expectError(unknownMatchesTemplate<undefined>(variable, 'string'));
-expectError(unknownMatchesTemplate<undefined>(variable, 'number'));
-expectError(unknownMatchesTemplate<undefined>(variable, 'boolean'));
-expectError(unknownMatchesTemplate<string | undefined>(variable, 'string'));
-expectError(unknownMatchesTemplate<number | undefined>(variable, 'number'));
-expectError(unknownMatchesTemplate<boolean | undefined>(variable, 'boolean'));
-expectError(unknownMatchesTemplate<string | null>(variable, 'string'));
-expectError(unknownMatchesTemplate<number | null>(variable, 'number'));
-expectError(unknownMatchesTemplate<boolean | null>(variable, 'boolean'));
+expectError(unknownMatchesTemplate<number>(variable, SimpleString));
+expectError(unknownMatchesTemplate<number>(variable, SimpleBoolean));
+expectError(unknownMatchesTemplate<number>(variable, SimpleUndefined));
+expectError(unknownMatchesTemplate<string>(variable, SimpleNumber));
+expectError(unknownMatchesTemplate<string>(variable, SimpleBoolean));
+expectError(unknownMatchesTemplate<string>(variable, SimpleUndefined));
+expectError(unknownMatchesTemplate<boolean>(variable, SimpleString));
+expectError(unknownMatchesTemplate<boolean>(variable, SimpleNumber));
+expectError(unknownMatchesTemplate<boolean>(variable, SimpleUndefined));
+expectError(unknownMatchesTemplate<undefined>(variable, SimpleString));
+expectError(unknownMatchesTemplate<undefined>(variable, SimpleNumber));
+expectError(unknownMatchesTemplate<undefined>(variable, SimpleBoolean));
+expectError(unknownMatchesTemplate<string | undefined>(variable, SimpleString));
+expectError(unknownMatchesTemplate<number | undefined>(variable, SimpleNumber));
+expectError(
+  unknownMatchesTemplate<boolean | undefined>(variable, SimpleBoolean)
+);
+expectError(unknownMatchesTemplate<string | null>(variable, SimpleString));
+expectError(unknownMatchesTemplate<number | null>(variable, SimpleNumber));
+expectError(unknownMatchesTemplate<boolean | null>(variable, SimpleBoolean));
 // Success
 expectType<string | null>(
-  unknownMatchesTemplate<string>(variable, 'string') ? variable : null
+  unknownMatchesTemplate<string>(variable, SimpleString) ? variable : null
 );
 expectType<boolean | null>(
-  unknownMatchesTemplate<boolean>(variable, 'boolean') ? variable : null
+  unknownMatchesTemplate<boolean>(variable, SimpleBoolean) ? variable : null
 );
 expectType<number | null>(
-  unknownMatchesTemplate<number>(variable, 'number') ? variable : null
+  unknownMatchesTemplate<number>(variable, SimpleNumber) ? variable : null
 );
 expectType<string | null | undefined>(
-  unknownMatchesTemplate<string | undefined>(variable, 'string?')
+  unknownMatchesTemplate<string | undefined>(variable, SimpleStringOptional)
     ? variable
     : null
 );
 expectType<boolean | null | undefined>(
-  unknownMatchesTemplate<boolean | undefined>(variable, 'boolean?')
+  unknownMatchesTemplate<boolean | undefined>(variable, SimpleBooleanOptional)
     ? variable
     : null
 );
 expectType<number | null | undefined>(
-  unknownMatchesTemplate<number | undefined>(variable, 'number?')
+  unknownMatchesTemplate<number | undefined>(variable, SimpleNumberOptional)
     ? variable
     : null
 );
 expectType<string | null>(
-  unknownMatchesTemplate<string | null>(variable, 'string?') ? variable : null
+  unknownMatchesTemplate<string | null>(variable, SimpleStringOptional)
+    ? variable
+    : null
 );
 expectType<boolean | null>(
-  unknownMatchesTemplate<boolean | null>(variable, 'boolean?') ? variable : null
+  unknownMatchesTemplate<boolean | null>(variable, SimpleBooleanOptional)
+    ? variable
+    : null
 );
 expectType<number | null>(
-  unknownMatchesTemplate<number | null>(variable, 'number?') ? variable : null
+  unknownMatchesTemplate<number | null>(variable, SimpleNumberOptional)
+    ? variable
+    : null
 );
 /**
  * Shallow Objects
  */
 // Error
 expectError(
-  unknownMatchesTemplate<{ hello: string }>(variable, { hello: 'number' })
+  unknownMatchesTemplate<{ hello: string }>(variable, { hello: SimpleNumber })
     ? variable
     : null
 );
 expectError(
-  unknownMatchesTemplate<{ hello: string }>(variable, 'string')
+  unknownMatchesTemplate<{ hello: string }>(variable, SimpleString)
     ? variable
     : null
 );
@@ -78,8 +101,8 @@ expectError(
 );
 expectError(
   unknownMatchesTemplate<{ hello: string }>(variable, {
-    hello: 'string',
-    error: 'undefined',
+    hello: SimpleString,
+    error: SimpleUndefined,
   })
     ? variable
     : null
@@ -87,7 +110,7 @@ expectError(
 
 // Success
 expectType<{ hello: string } | null>(
-  unknownMatchesTemplate<{ hello: string }>(variable, { hello: 'string' })
+  unknownMatchesTemplate<{ hello: string }>(variable, { hello: SimpleString })
     ? variable
     : null
 );
@@ -103,7 +126,7 @@ expectError(
     };
   }>(variable, {
     hello: {
-      world: 'string',
+      world: SimpleString,
     },
   })
     ? variable
@@ -116,8 +139,8 @@ expectError(
     };
   }>(variable, {
     hello: {
-      world: 'number',
-      fail: 'string',
+      world: SimpleNumber,
+      fail: SimpleString,
     },
   })
     ? variable
@@ -140,7 +163,7 @@ expectError(
       world: number;
     };
   }>(variable, {
-    hello: 'string',
+    hello: SimpleString,
   })
     ? variable
     : null
@@ -154,7 +177,7 @@ expectError(
       }
     | undefined
   >(variable, {
-    hello: 'string',
+    hello: SimpleString,
   })
     ? variable
     : null
@@ -183,7 +206,7 @@ expectType<{
     };
   }>(variable, {
     hello: {
-      world: 'number',
+      world: SimpleNumber,
     },
   })
     ? variable
@@ -205,12 +228,18 @@ expectType<
         };
       }
     | undefined
-  >(variable, {
-    $optional: true,
-    hello: {
-      world: 'number',
-    },
-  })
+  >(
+    variable,
+    new SimpleObjectOptional<{
+      hello: {
+        world: number;
+      };
+    }>({
+      hello: {
+        world: SimpleNumber,
+      },
+    })
+  )
     ? variable
     : null
 );
@@ -220,7 +249,7 @@ expectType<{
   unknownMatchesTemplate<{
     hello?: string;
   }>(variable, {
-    hello: 'string?',
+    hello: SimpleStringOptional,
   })
     ? variable
     : null
@@ -231,27 +260,51 @@ expectType<{
  */
 // Error
 expectError(
-  unknownMatchesTemplate<string[]>(variable, ['number']) ? variable : null
-);
-expectError(
-  unknownMatchesTemplate<[string[]]>(variable, ['string']) ? variable : null
-);
-expectError(
-  unknownMatchesTemplate<{ key: string }[]>(variable, [{ key: 'number' }])
+  unknownMatchesTemplate<string[]>(variable, new SimpleArray(SimpleNumber))
     ? variable
     : null
 );
 expectError(
-  unknownMatchesTemplate<[{ key: string }] | undefined>(variable, [
-    { key: 'string' },
-  ])
+  unknownMatchesTemplate<[string[]]>(variable, new SimpleArray(SimpleString))
     ? variable
     : null
 );
 expectError(
-  unknownMatchesTemplate<[{ key: string }] | null>(variable, [
-    { key: 'string' },
-  ])
+  unknownMatchesTemplate<{ key: string }[]>(
+    variable,
+    new SimpleArray({ key: SimpleNumber })
+  )
+    ? variable
+    : null
+);
+
+expectError(
+  unknownMatchesTemplate<[{ key: string }] | undefined>(
+    variable,
+    new SimpleArray({ key: SimpleString })
+  )
+    ? variable
+    : null
+);
+expectError(
+  unknownMatchesTemplate<{ key: string }[] | null>(
+    variable,
+    new SimpleArray({ key: SimpleString })
+  )
+    ? variable
+    : null
+);
+
+// Deep nested array error
+expectError(
+  unknownMatchesTemplate<[{ key: { key: string[] | undefined }[] }]>(
+    variable,
+    new SimpleArray({
+      key: new SimpleArray({
+        key: new SimpleArray(SimpleString),
+      }),
+    })
+  )
     ? variable
     : null
 );
@@ -260,25 +313,140 @@ expectError(
 
 // Success
 expectType<[[{ key: string }]] | null>(
-  unknownMatchesTemplate<[[{ key: string }]]>(variable, [[{ key: 'string' }]])
+  unknownMatchesTemplate<[[{ key: string }]]>(
+    variable,
+    new SimpleArray(new SimpleArray({ key: SimpleString }))
+  )
     ? variable
     : null
 );
 // Optional: Undefined
 expectType<[{ key: string }] | null | undefined>(
-  unknownMatchesTemplate<[{ key: string }] | undefined>(variable, [
-    { key: 'string' },
-    '$optional',
-  ])
+  unknownMatchesTemplate<[{ key: string }] | undefined>(
+    variable,
+    new SimpleArrayOptional<{ key: string }>({ key: SimpleString })
+  )
     ? variable
     : null
 );
 // Optional: Null
 expectType<[{ key: string }] | null>(
-  unknownMatchesTemplate<[{ key: string }] | null>(variable, [
-    { key: 'string' },
-    '$optional',
-  ])
+  unknownMatchesTemplate<[{ key: string }] | null>(
+    variable,
+    new SimpleArrayOptional<{ key: string }>({ key: SimpleString })
+  )
     ? variable
     : null
 );
+
+/**
+ * SimpleSkip
+ */
+expectError(
+  unknownMatchesTemplate<{ key: { foo: string } }>(variable, {
+    key: new SimpleSkip({}),
+  })
+    ? variable
+    : null
+);
+expectType<{ key: { foo: string } } | null>(
+  unknownMatchesTemplate<{ key: { foo: string } }>(variable, {
+    key: SimpleSkip,
+  })
+    ? variable
+    : null
+);
+
+/**
+ * SimpleOr
+ */
+// FAILURE
+expectError(
+  unknownMatchesTemplate<{ key: string | number }>(variable, {
+    key: SimpleOr(SimpleString, SimpleNumber, SimpleSymbol),
+  })
+    ? variable
+    : null
+);
+
+// Duplicate parameters
+// expectError(
+//   unknownMatchesTemplate<{ key: string | number }>(variable, {
+//     key: SimpleOr(SimpleString, SimpleNumber, SimpleNumber),
+//   })
+//     ? variable
+//     : null
+// );
+
+// SUCCESS
+// Two type
+expectType<{ key: string | number } | null>(
+  unknownMatchesTemplate<{ key: string | number }>(variable, {
+    key: new SimpleOr<string | number>(SimpleString, SimpleNumber),
+  })
+    ? variable
+    : null
+);
+
+// Three type
+expectType<{ key: string | number | boolean } | null>(
+  unknownMatchesTemplate<{ key: string | number | boolean }>(variable, {
+    key: new SimpleOr(SimpleString, SimpleBoolean, SimpleNumber),
+  })
+    ? variable
+    : null
+);
+
+// Deep Comparison
+expectType<{
+  key:
+    | {
+        person: number[];
+      }
+    | { car: boolean };
+} | null>(
+  unknownMatchesTemplate<{
+    key:
+      | {
+          person: number[];
+        }
+      | { car: boolean };
+  }>(variable, {
+    key: new SimpleOr(
+      {
+        person: new SimpleArray(SimpleNumber),
+      },
+      {
+        car: SimpleBoolean,
+      }
+    ),
+  })
+    ? variable
+    : null
+);
+
+/**
+ * SimpleExactMatch
+ */
+expectType<{ key: 'hello' | 'dolly' } | null>(
+  unknownMatchesTemplate<{ key: 'hello' | 'dolly' }>(variable, {
+    key: new SimpleExactMatch('hello', 'dolly'),
+  })
+    ? variable
+    : null
+);
+
+/**
+ * Common Error Types
+ */
+expectError(
+  unknownMatchesTemplate<{ key: { foo: string[] } }>(variable, {
+    key: {
+      foo: [],
+    },
+  })
+    ? variable
+    : null
+);
+
+// TODO using an optional in place of a non-optional

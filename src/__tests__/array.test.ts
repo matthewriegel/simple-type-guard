@@ -1,58 +1,72 @@
-import unknownMatchesTemplate from '..';
+import simpleTypeGuard, {
+  SimpleArray,
+  SimpleArrayOptional,
+  SimpleNumber,
+  SimpleString,
+} from '..';
 
 describe('array type tests', () => {
   test('array type guard recognizes string - truthy', () => {
-    const result = unknownMatchesTemplate<string[]>(['hello'], ['string']);
+    const result = simpleTypeGuard<string[]>(
+      ['hello'],
+      new SimpleArray<string>(SimpleString)
+    );
     expect(result).toBe(true);
   });
 
   test('array type guard recognizes string - falsy', () => {
-    const result = unknownMatchesTemplate<string[]>([3], ['string']);
+    const result = simpleTypeGuard<string[]>(
+      [3],
+      new SimpleArray<string>(SimpleString)
+    );
     expect(result).toBe(false);
   });
 
   test('array type guard recognizes nested array string - truthy', () => {
-    const result = unknownMatchesTemplate<Array<string[]>>(
+    const result = simpleTypeGuard<string[][]>(
       [['hello']],
-      [['string']]
+      new SimpleArray<string[]>(new SimpleArray<string>(SimpleString))
     );
     expect(result).toBe(true);
   });
 
   test('array type guard recognizes nested array string - falsy', () => {
-    const result = unknownMatchesTemplate<Array<string[]>>([[3]], [['string']]);
+    const result = simpleTypeGuard<string[][]>(
+      [[3]],
+      new SimpleArray<string[]>(new SimpleArray<string>(SimpleString))
+    );
     expect(result).toBe(false);
   });
 
   test('array type guard recognizes object - truthy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }>>(
+    const result = simpleTypeGuard<{ key: number }[]>(
       [{ key: 123 }, { key: 123984 }],
-      [{ key: 'number' }]
+      new SimpleArray<{ key: number }>({ key: SimpleNumber })
     );
     expect(result).toBe(true);
   });
 
   test('array type guard recognizes object - falsy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }>>(
+    const result = simpleTypeGuard<{ key: number }[]>(
       [{ key: 123 }, { key: 'invalid' }],
-      [{ key: 'number' }]
+      new SimpleArray<{ key: number }>({ key: SimpleNumber })
     );
     expect(result).toBe(false);
   });
 
   test('array type guard recognizes optional - truthy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }> | undefined>(
+    const result = simpleTypeGuard<{ key: number }[] | undefined>(
       undefined,
-      [{ key: 'number' }, '$optional']
+      new SimpleArrayOptional<{ key: number }>({ key: SimpleNumber })
     );
     expect(result).toBe(true);
   });
 
   test('array type guard recognizes null optional - truthy', () => {
-    const result = unknownMatchesTemplate<Array<{ key: number }> | null>(null, [
-      { key: 'number' },
-      '$optional',
-    ]);
+    const result = simpleTypeGuard<{ key: number }[] | null>(
+      null,
+      new SimpleArrayOptional<{ key: number }>({ key: SimpleNumber })
+    );
     expect(result).toBe(true);
   });
 });
