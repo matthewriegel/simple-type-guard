@@ -47,7 +47,7 @@ type IsObjectOptionalType<VariableType> = Extract<
 > extends never
   ? never
   : ExcludeObject<Exclude<VariableType, undefined | null>> extends never
-  ? SimpleObjectOptional<VariableType>
+  ? SimpleObjectOptional<Exclude<VariableType, undefined | null>>
   : never;
 
 type IsArrayType<VariableType> = IsType<
@@ -118,10 +118,6 @@ type Complete<T> = {
 export type TypeofToTemplate<ReturnType> =
   | TypeToTypeofStrict<Complete<ReturnType>>
   | TypeToTypeofUniversal<Complete<ReturnType>>;
-
-export type TypeofToTemplateExcludeOptionals<Type> = TypeofToTemplate<
-  Exclude<Type, null | undefined>
->;
 
 export type TypeofValue =
   | 'string'

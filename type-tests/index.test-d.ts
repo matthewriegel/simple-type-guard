@@ -449,4 +449,71 @@ expectError(
     : null
 );
 
-// TODO using an optional in place of a non-optional
+// Test Optional Arrays
+expectError(
+  unknownMatchesTemplate<{ key: string[] | undefined }>(variable, {
+    key: new SimpleArray(SimpleString),
+  })
+    ? variable
+    : null
+);
+
+expectError(
+  unknownMatchesTemplate<{ key: string[] | undefined }>(variable, {
+    key: new SimpleArray<string>(SimpleString),
+  })
+    ? variable
+    : null
+);
+
+expectType<{ key: string[] | undefined } | null>(
+  unknownMatchesTemplate<{ key: string[] | undefined }>(variable, {
+    key: new SimpleArrayOptional(SimpleString),
+  })
+    ? variable
+    : null
+);
+
+expectType<{ key: string[] | undefined } | null>(
+  unknownMatchesTemplate<{ key: string[] | undefined }>(variable, {
+    key: new SimpleArrayOptional<string>(SimpleString),
+  })
+    ? variable
+    : null
+);
+
+// Test Deep Arrays
+expectType<{
+  key:
+    | (
+        | {
+            key: number[] | undefined;
+          }
+        | undefined
+      )[]
+    | undefined;
+} | null>(
+  unknownMatchesTemplate<{
+    key:
+      | Array<
+          | {
+              key: number[] | undefined;
+            }
+          | undefined
+        >
+      | undefined;
+  }>(variable, {
+    key: new SimpleArrayOptional<
+      | {
+          key: number[] | undefined;
+        }
+      | undefined
+    >(
+      new SimpleObjectOptional<{ key: number[] | undefined }>({
+        key: new SimpleArrayOptional<number>(SimpleNumber),
+      })
+    ),
+  })
+    ? variable
+    : null
+);

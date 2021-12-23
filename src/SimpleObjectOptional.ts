@@ -1,10 +1,10 @@
 import AbstractValidator from './AbstractValidator';
-import { TypeofToTemplateExcludeOptionals } from './types';
+import { TypeofToTemplate } from './types';
 import { handleResult, unknownMatchesTemplate } from './unknownMatchesTemplate';
 
 class SimpleObjectOptional<
   Type,
-  ConvertedType = TypeofToTemplateExcludeOptionals<Type>
+  ConvertedType = TypeofToTemplate<Type>
 > extends AbstractValidator<ConvertedType, 'object-optional'> {
   readonly label = 'object-optional' as const;
 
