@@ -130,7 +130,3 @@ export type TypeofValue =
 export interface Options {
   throwErrorOnFailure?: boolean;
 }
-
-type P = UnpackArray<
-  Exclude<({ key: string } | undefined)[], null | undefined>
->;
