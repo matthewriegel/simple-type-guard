@@ -1,10 +1,10 @@
 import AbstractValidator from './AbstractValidator';
 import { arrayAndContentsMatchTemplate } from './object';
-import { TypeofToTemplateExcludeOptionals } from './types';
+import { TypeofToTemplate } from './types';
 
 class SimpleArrayOptional<
   Type,
-  ConvertedType = TypeofToTemplateExcludeOptionals<Type>
+  ConvertedType = TypeofToTemplate<Type>
 > extends AbstractValidator<ConvertedType, 'array-optional'> {
   readonly label = 'array-optional' as const;
 
