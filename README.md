@@ -189,8 +189,6 @@ simpleTypeGuard<Foo | undefined>(
 
 #### Arrays
 
-Optional arrays will require an `'$optional'` in index [1]
-
 ```ts
 import simpleTypeGuard, {
   SimpleNumber,
