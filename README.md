@@ -86,9 +86,45 @@ simpleTypeGuard<Foo>(
 ); // -> false
 ```
 
-#### Functions/Something Complicated?
+#### Enums
 
-If you wanted to match against a complicated union type, or even a set of enums, `'simple-type-guard'` allows you to implement a function for a more specific validation test.
+If you have a type consisting of a number of enums (ie `type Color = 'red' | 'blue' | 'green'`), consider using SimpleExactMatch. Every parameter will be matched against.
+
+```ts
+import simpleTypeGuard, { SimpleExactMatch } from 'simple-type-guard';
+
+const colors = ['red', 'blue', 'green'];
+type Color = typeof colors[number]; // 'red' | 'blue' | 'green'
+
+simpleTypeGuard<Color>('red', new SimpleExactMatch(...colors)); // -> true
+```
+
+#### Unions
+
+If you have a union consisting of multiple conflicting types, SimpleOr can be used to iterate through each possible type. Every parameter will be matched against.
+
+```ts
+import simpleTypeGuard, { SimpleOr } from 'simple-type-guard';
+
+interface Car {
+  model: string;
+}
+
+interface Person {
+  company: string;
+}
+
+type Foo = Car | Person;
+
+simpleTypeGuard<Foo>(
+  { company: 'willowtree' },
+  new SimpleOr({ model: SimpleString }, { company: SimpleString })
+); // -> true
+```
+
+#### Functions
+
+If you wanted a lot more control over how a type is validated, `'simple-type-guard'` allows you to implement a function for a more specific validation test.
 
 ```ts
 import simpleTypeGuard, { SimpleFunction } from 'simple-type-guard';
@@ -100,7 +136,7 @@ interface Foo {
 simpleTypeGuard<Foo>(
   { bar: 'one' },
   {
-    bar: SimpleFunction(
+    bar: new SimpleFunction(
       (barVariable: unknown) =>
         ['one', 'two', 'three'].indexOf(barVariable) !== -1
     ),
@@ -147,7 +183,7 @@ interface Foo {
 
 simpleTypeGuard<Foo | undefined>(
   undefined,
-  SimpleObjectOptional<Foo>({ bar: SimpleNumber })
+  new SimpleObjectOptional<Foo>({ bar: SimpleNumber })
 ); // -> true
 ```
 
@@ -172,7 +208,7 @@ interface FooListItem {
 simpleTypeGuard<Foo>(
   { list: undefined },
   {
-    list: SimpleArrayOptional<FooListItem[]>({ bar: SimpleNumber }),
+    list: new SimpleArrayOptional<FooListItem[]>({ bar: SimpleNumber }),
   }
 ); // -> true
 ```
