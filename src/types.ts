@@ -62,8 +62,8 @@ type IsArrayOptionalType<VariableType> = IsOptionalType<
   SimpleArrayOptional<UnpackArray<Exclude<VariableType, null | undefined>>>
 >;
 
-export type ApplyStrictTypeof<VariableType> = VariableType extends any
-  ? TypeToTypeofStrict<VariableType>
+export type ApplyStrictTypeof<VariableType> = VariableType extends unknown
+  ? TypeofToTemplate<VariableType>
   : never;
 
 type TypeToTypeofUniversal<VariableType> =

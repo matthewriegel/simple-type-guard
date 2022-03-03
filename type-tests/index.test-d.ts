@@ -517,3 +517,25 @@ expectType<{
     ? variable
     : null
 );
+
+// Test deep OR validator
+expectType<{
+  response?: {
+    status?: number | string;
+  };
+  code?: number | string;
+} | null>(
+  unknownMatchesTemplate<{
+    response?: {
+      status?: number | string;
+    };
+    code?: number | string;
+  }>(variable, {
+    response: new SimpleObjectOptional({
+      status: new SimpleOr(SimpleString, SimpleNumber, SimpleUndefined),
+    }),
+    code: new SimpleOr(SimpleString, SimpleNumber, SimpleUndefined),
+  })
+    ? variable
+    : null
+);
