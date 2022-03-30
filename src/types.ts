@@ -63,7 +63,7 @@ type IsArrayOptionalType<VariableType> = IsOptionalType<
 >;
 
 export type ApplyStrictTypeof<VariableType> = VariableType extends unknown
-  ? TypeofToTemplate<VariableType>
+  ? TypeToTypeofStrict<VariableType>
   : never;
 
 type TypeToTypeofUniversal<VariableType> =

@@ -25,7 +25,7 @@ class SimpleObjectOptional<
         unknownMatchesTemplate<Type>(
           (unknownValue as Record<string, unknown>)[key],
           value,
-          currentPath
+          `${currentPath}.${key}`
         )
       );
 

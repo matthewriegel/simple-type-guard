@@ -23,7 +23,8 @@ export const handleResult = (
 Expected "${expectedType}"
 Found "${typeof unknownVariable}"
 
-Variable Output: ${printedVariable}`
+Variable Output: ${printedVariable}
+`
   );
 };
 
