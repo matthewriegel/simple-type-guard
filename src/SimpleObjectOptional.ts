@@ -4,7 +4,7 @@ import { handleResult, unknownMatchesTemplate } from './unknownMatchesTemplate';
 
 class SimpleObjectOptional<
   Type,
-  ConvertedType = TypeofToTemplate<Type>
+  ConvertedType extends TypeofToTemplate<Type> = TypeofToTemplate<Type>
 > extends AbstractValidator<ConvertedType, 'object-optional'> {
   readonly label = 'object-optional' as const;
 
