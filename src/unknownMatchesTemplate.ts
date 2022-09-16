@@ -34,19 +34,19 @@ export const unknownMatchesTemplate = <ReturnType>(
   currentPath: string
 ): unknownVariable is ReturnType => {
   if (typeof template === 'function') {
-    const resultClass = new template(undefined);
+    // template is a class
+    const TemplateClass = template;
+    const resultClass = new TemplateClass(undefined);
     return resultClass.validate(unknownVariable, currentPath);
-  } else if (
+  }
+
+  if (
     typeof template === 'object' &&
     'validate' in template &&
     typeof template.validate === 'function'
   ) {
     return template.validate(unknownVariable, currentPath);
-  } else {
-    return objectAndContentsMatchTemplate(
-      unknownVariable,
-      template,
-      currentPath
-    );
   }
+
+  return objectAndContentsMatchTemplate(unknownVariable, template, currentPath);
 };

@@ -2,6 +2,7 @@ import simpleTypeGuard, {
   SimpleBoolean,
   SimpleNumber,
   SimpleObjectOptional,
+  SimpleSkip,
   SimpleString,
   SimpleStringOptional,
 } from '..';
@@ -128,6 +129,7 @@ describe('objects type tests', () => {
       message: SimpleString,
       name: SimpleString,
       stack: SimpleStringOptional,
+      cause: SimpleSkip,
     });
 
     expect(result).toBe(false);
@@ -138,6 +140,7 @@ describe('objects type tests', () => {
       message: SimpleString,
       name: SimpleString,
       stack: SimpleStringOptional,
+      cause: SimpleSkip,
     });
 
     expect(result).toBe(true);

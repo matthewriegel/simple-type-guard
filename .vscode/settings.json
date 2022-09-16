@@ -11,6 +11,6 @@
   "liveshare.allowGuestDebugControl": true,
   "terminal.integrated.scrollback": 25000,
   "task.quickOpen.history": 3,
-  "typescript.tsdk": "./tools/node_modules/typescript/lib",
+  "typescript.tsdk": "./node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }

@@ -4,16 +4,12 @@ import { TypeofToTemplate } from './types';
 
 class SimpleArray<
   Type,
-  ConvertedType = TypeofToTemplate<Type>
+  ConvertedType extends TypeofToTemplate<Type> = TypeofToTemplate<Type>
 > extends AbstractValidator<ConvertedType, 'array'> {
   readonly label = 'array' as const;
 
-  constructor(parameter: ConvertedType) {
-    super(parameter);
-  }
-
   validate(unknownValue: unknown, currentPath: string) {
-    return arrayAndContentsMatchTemplate(
+    return arrayAndContentsMatchTemplate<Type>(
       unknownValue,
       this.parameter,
       currentPath

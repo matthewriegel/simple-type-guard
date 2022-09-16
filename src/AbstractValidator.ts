@@ -1,9 +1,12 @@
-abstract class AbstractValidator<Type, Differentiator extends string> {
+abstract class AbstractValidator<
+  TypeofTemplateType,
+  Differentiator extends string
+> {
   protected abstract readonly label: Differentiator;
 
-  protected parameter: Type;
+  protected parameter: TypeofTemplateType;
 
-  constructor(_parameter: Type) {
+  constructor(_parameter: TypeofTemplateType) {
     this.parameter = _parameter;
   }
 

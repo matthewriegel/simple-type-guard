@@ -46,6 +46,4 @@ const simpleTypeGuard = <ReturnType>(
   }
 };
 
-type I = TypeofToTemplate<string | undefined>;
-
 export default simpleTypeGuard;

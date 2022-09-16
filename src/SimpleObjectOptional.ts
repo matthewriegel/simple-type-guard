@@ -8,10 +8,6 @@ class SimpleObjectOptional<
 > extends AbstractValidator<ConvertedType, 'object-optional'> {
   readonly label = 'object-optional' as const;
 
-  constructor(template: ConvertedType) {
-    super(template);
-  }
-
   validate(unknownValue: unknown, currentPath: string) {
     if (unknownValue === undefined || unknownValue === null) {
       return true;

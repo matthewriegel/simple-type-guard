@@ -1,8 +1,9 @@
+import { TypeofToTemplate } from './types';
 import { handleResult, unknownMatchesTemplate } from './unknownMatchesTemplate';
 
-export const objectAndContentsMatchTemplate = <Type>(
+export const objectAndContentsMatchTemplate = <ReturnType>(
   unknownValue: unknown,
-  template: Type,
+  template: TypeofToTemplate<ReturnType>,
   currentPath: string
 ) => {
   const result =
@@ -10,7 +11,7 @@ export const objectAndContentsMatchTemplate = <Type>(
     unknownValue !== null &&
     !Array.isArray(unknownValue) &&
     Object.entries(template).every(([key, value]) =>
-      unknownMatchesTemplate<Type>(
+      unknownMatchesTemplate<ReturnType>(
         (unknownValue as Record<string, unknown>)[key],
         value,
         `${currentPath}.${key}`
@@ -20,9 +21,9 @@ export const objectAndContentsMatchTemplate = <Type>(
   return handleResult(result, unknownValue, 'object', currentPath);
 };
 
-export const arrayAndContentsMatchTemplate = <Type>(
+export const arrayAndContentsMatchTemplate = <ReturnType>(
   unknownValue: unknown,
-  template: Type,
+  template: TypeofToTemplate<ReturnType>,
   currentPath: string
 ) => {
   const result =

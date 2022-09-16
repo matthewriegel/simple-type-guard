@@ -6,10 +6,6 @@ abstract class AbstractPrimitiveValidator<
   TypeOfGeneric extends TypeofValue,
   Differentiator extends string = TypeOfGeneric
 > extends AbstractValidator<TypeOfGeneric, Differentiator> {
-  constructor(typeofValue: TypeOfGeneric) {
-    super(typeofValue);
-  }
-
   validate(unknownValue: unknown, currentPath: string) {
     return handleResult(
       typeof unknownValue === this.parameter,

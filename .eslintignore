@@ -1,0 +1,20 @@
+# packages
+node_modules
+
+# build output
+lib
+
+# cache
+.jest-cache
+
+# definitions
+*.d.ts
+
+# config
+*.config*.js
+jest.setup.js
+.eslintrc*.js
+
+# Type Tests
+type-tests
+
