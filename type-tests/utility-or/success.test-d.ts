@@ -21,7 +21,7 @@ expectType<{ key: string | number } | null>(
 // Three type
 expectType<{ key: string | number | boolean } | null>(
   unknownMatchesTemplate<{ key: string | number | boolean }>(variable, {
-    key: new SimpleOr(SimpleString, SimpleBoolean, SimpleNumber),
+    key: new SimpleOr(SimpleString, SimpleNumber, SimpleBoolean),
   })
     ? variable
     : null

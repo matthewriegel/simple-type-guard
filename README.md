@@ -103,6 +103,10 @@ simpleTypeGuard<Color>('red', new SimpleExactMatch(...colors)); // -> true
 
 If you have a union consisting of multiple conflicting types, SimpleOr can be used to iterate through each possible type. Every parameter will be matched against.
 
+NOTE: Booleans behave weirdly in Typescript when separating through unions. (`boolean` turns into `true | false`). To avoid issues, any time a `boolean` occurs within the SimpleOr, it must be the last value in the parameters.
+
+For example: `string | boolean | number` -> `new SimpleOr(SimpleString,SimpleNumber,SimpleBoolean)`
+
 ```ts
 import simpleTypeGuard, { SimpleOr } from 'simple-type-guard';
 

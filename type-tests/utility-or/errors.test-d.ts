@@ -8,23 +8,29 @@ import unknownMatchesTemplate, {
 
 const variable: unknown = '';
 
-/**
- * SimpleOr
- */
-// FAILURE
+// Including an extra not-included type
 expectError(
   unknownMatchesTemplate<{ key: string | number }>(variable, {
-    key: SimpleOr(SimpleString, SimpleNumber, SimpleSymbol),
+    key: new SimpleOr(SimpleString, SimpleNumber, SimpleSymbol),
   })
     ? variable
     : null
 );
 
-// Duplicate parameters
-// expectError(
-//   unknownMatchesTemplate<{ key: string | number }>(variable, {
-//     key: SimpleOr(SimpleString, SimpleNumber, SimpleNumber),
-//   })
-//     ? variable
-//     : null
-// );
+// Forgetting a type
+expectError(
+  unknownMatchesTemplate<{ key: string | number }>(variable, {
+    key: new SimpleOr(SimpleString),
+  })
+    ? variable
+    : null
+);
+
+// Duplicate Types
+expectError(
+  unknownMatchesTemplate<{ key: string | number }>(variable, {
+    key: new SimpleOr(SimpleString, SimpleNumber, SimpleNumber),
+  })
+    ? variable
+    : null
+);
