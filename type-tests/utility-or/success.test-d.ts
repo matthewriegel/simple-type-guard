@@ -5,6 +5,7 @@ import unknownMatchesTemplate, {
   SimpleNumber,
   SimpleOr,
   SimpleString,
+  SimpleUndefined,
 } from '../../src';
 
 const variable: unknown = '';
@@ -49,6 +50,54 @@ expectType<{
       {
         car: SimpleBoolean,
       }
+    ),
+  })
+    ? variable
+    : null
+);
+
+interface AnimalRef {
+  id: number | string;
+  breed: string;
+}
+
+interface PersonRef {
+  id: number | string;
+  name: string;
+  pets?: AnimalRef[] | AnimalRef;
+}
+
+interface Top {
+  id: number | string;
+  references: (PersonRef | AnimalRef)[];
+}
+
+// Nested Or
+expectType<Top | null>(
+  unknownMatchesTemplate<Top>(variable, {
+    id: new SimpleOr(SimpleString, SimpleNumber),
+    references: new SimpleArray(
+      new SimpleOr(
+        {
+          id: new SimpleOr(SimpleString, SimpleNumber),
+          breed: SimpleString,
+        },
+        {
+          id: new SimpleOr(SimpleString, SimpleNumber),
+          name: SimpleString,
+          pets: new SimpleOr(
+            SimpleUndefined,
+            new SimpleArray({
+              id: new SimpleOr(SimpleString, SimpleNumber),
+              breed: SimpleString,
+            }),
+            {
+              id: new SimpleOr(SimpleString, SimpleNumber),
+              breed: SimpleString,
+            }
+          ),
+        }
+      )
     ),
   })
     ? variable
