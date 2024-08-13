@@ -5,7 +5,7 @@ export const handleResult = (
   result: boolean,
   unknownVariable: unknown,
   expectedType: string,
-  currentPath: string
+  currentPath: string,
 ): boolean => {
   if (result) {
     return result;
@@ -14,7 +14,7 @@ export const handleResult = (
   let printedVariable: string;
   try {
     printedVariable = JSON.stringify(unknownVariable);
-  } catch (error) {
+  } catch (_error) {
     printedVariable = 'unknown';
   }
 
@@ -24,14 +24,14 @@ Expected "${expectedType}"
 Found "${typeof unknownVariable}"
 
 Variable Output: ${printedVariable}
-`
+`,
   );
 };
 
 export const unknownMatchesTemplate = <ReturnType>(
   unknownVariable: unknown,
   template: TypeofToTemplate<ReturnType>,
-  currentPath: string
+  currentPath: string,
 ): unknownVariable is ReturnType => {
   if (typeof template === 'function') {
     // template is a class

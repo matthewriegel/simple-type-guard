@@ -1,6 +1,6 @@
 {
   "name": "simple-type-guard",
-  "version": "3.3.9",
+  "version": "3.4.0",
   "description": "This module allows you to quickly and safely validate variables against a defined template, enforced by Typescript. No hassle and easy to scan.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -37,21 +37,18 @@
   "author": "Hugh Riegel",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^29.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.37.0",
-    "@typescript-eslint/parser": "^5.37.0",
-    "eslint": "^8.23.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-next": "^12.3.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-jest": "^27.0.4",
-    "jest": "^29.0.3",
-    "prettier": "^2.7.1",
-    "ts-jest": "^29.0.1",
-    "ts-node": "^10.9.1",
-    "tsd": "^0.24.1",
-    "typescript": "^4.8.3"
+    "@types/jest": "^29.5.12",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.8.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.3",
+    "ts-jest": "^29.2.4",
+    "ts-node": "^10.9.2",
+    "tsd": "^0.31.1",
+    "typescript": "^5.5.4"
   },
   "tsd": {
     "directory": "type-tests"
